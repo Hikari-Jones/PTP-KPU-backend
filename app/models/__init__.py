@@ -1,4 +1,6 @@
 from app.models.schema import (
-    Bagian, Pegawai, AkunAnggaran, RealisasiAnggaran, Surat, Disposisi,
-    DokumenArsip, ChatSession, ChatMessage
+    Bagian, Pegawai, KodeKlasifikasiArsip, JenisSurat, PenomoranSequence,
+    SuratKeluar, SuratTugas, SuratTugasPelaksana, RiwayatStatusSurat,
+    Disposisi, DokumenArsip, AkunAnggaran, RealisasiAnggaran,
+    ChatSession, ChatMessage
 )
