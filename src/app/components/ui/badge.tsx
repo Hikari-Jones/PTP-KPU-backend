@@ -5,18 +5,18 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function Badge({ className = "", variant = "default", ...props }: BadgeProps) {
-  let variantStyles = "bg-red-500/10 text-red-400 border border-red-500/20"
+  let variantStyles = "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30 font-bold"
   
-  if (variant === "terkirim" || variant === "success") {
-    variantStyles = "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-  } else if (variant === "diterima" || variant === "info") {
-    variantStyles = "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-  } else if (variant === "diproses" || variant === "warning") {
-    variantStyles = "bg-blue-500/15 text-blue-400 border border-blue-500/30"
+  if (variant === "terkirim" || variant === "success" || variant === "diterima") {
+    variantStyles = "bg-slate-900 text-white dark:bg-white dark:text-slate-950 border border-slate-700 dark:border-slate-300 font-bold shadow-xs"
+  } else if (variant === "diproses" || variant === "info") {
+    variantStyles = "bg-red-600 text-white border border-red-700 font-bold shadow-xs"
+  } else if (variant === "warning") {
+    variantStyles = "bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/30 font-bold"
   } else if (variant === "draft" || variant === "secondary") {
-    variantStyles = "bg-gray-800 text-gray-400 border border-gray-700"
+    variantStyles = "bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-gray-200 border border-slate-300 dark:border-slate-700 font-bold"
   } else if (variant === "outline") {
-    variantStyles = "text-gray-300 border border-gray-700"
+    variantStyles = "bg-transparent text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 font-bold"
   }
 
   return (

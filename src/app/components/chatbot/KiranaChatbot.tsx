@@ -25,7 +25,7 @@ export function KiranaChatbot({ theme = "light" }: { theme?: "light" | "dark" })
   const [isOpen, setIsOpen] = useState(false)
   const [inputMessage, setInputMessage] = useState("")
   const [isProcessing, setIsProcessing] = useState(false)
-  
+
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
@@ -261,17 +261,15 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
     <div className="fixed bottom-6 right-6 z-50">
       {isOpen ? (
         <Card
-          className={`w-80 md:w-96 h-[520px] shadow-2xl flex flex-col backdrop-blur-md transition-all duration-200 animate-in fade-in slide-in-from-bottom-5 ${
-            isDark
+          className={`w-80 md:w-96 h-[520px] shadow-2xl flex flex-col backdrop-blur-md transition-all duration-200 animate-in fade-in slide-in-from-bottom-5 ${isDark
               ? "border-[#1e293b] bg-[#0c1220]/95 text-gray-100"
               : "border-slate-200 bg-white/95 text-slate-800 shadow-slate-300/60"
-          }`}
+            }`}
         >
           {/* Header */}
           <CardHeader
-            className={`p-3.5 border-b flex flex-row items-center justify-between shrink-0 ${
-              isDark ? "border-[#1e293b] bg-[#11192b]" : "border-slate-200 bg-slate-50"
-            }`}
+            className={`p-3.5 border-b flex flex-row items-center justify-between shrink-0 ${isDark ? "border-[#1e293b] bg-[#11192b]" : "border-slate-200 bg-slate-50"
+              }`}
           >
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-600 font-bold">
@@ -279,9 +277,8 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
               </div>
               <div>
                 <CardTitle
-                  className={`text-sm font-bold flex items-center gap-1.5 ${
-                    isDark ? "text-gray-100" : "text-slate-900"
-                  }`}
+                  className={`text-sm font-bold flex items-center gap-1.5 ${isDark ? "text-gray-100" : "text-slate-900"
+                    }`}
                 >
                   KIRANA Agent
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -295,11 +292,10 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setIsOpen(false)}
-                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                  isDark
+                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${isDark
                     ? "text-gray-400 hover:text-white hover:bg-[#1e293b]"
                     : "text-slate-400 hover:text-slate-800 hover:bg-slate-200"
-                }`}
+                  }`}
                 title="Perkecil Widget"
               >
                 <Minimize2 className="w-4 h-4" />
@@ -309,9 +305,8 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
 
           {/* Quick Suggestions Chips Section */}
           <div
-            className={`px-3 py-2 border-b flex items-center gap-1.5 overflow-x-auto custom-scrollbar shrink-0 ${
-              isDark ? "bg-[#090e1a] border-[#1e293b]" : "bg-slate-100/70 border-slate-200"
-            }`}
+            className={`px-3 py-2 border-b flex items-center gap-1.5 overflow-x-auto custom-scrollbar shrink-0 ${isDark ? "bg-[#090e1a] border-[#1e293b]" : "bg-slate-100/70 border-slate-200"
+              }`}
           >
             <span className="text-[10px] font-bold text-red-600 dark:text-red-400 shrink-0 flex items-center gap-1">
               <Sparkles className="w-3 h-3" /> Chip Cepat:
@@ -322,11 +317,10 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
                 type="button"
                 onClick={() => handleSendMessageText(chip)}
                 disabled={isProcessing}
-                className={`px-2 py-0.5 rounded-full text-[10px] font-medium whitespace-nowrap transition-all cursor-pointer border shrink-0 ${
-                  isDark
+                className={`px-2 py-0.5 rounded-full text-[10px] font-medium whitespace-nowrap transition-all cursor-pointer border shrink-0 ${isDark
                     ? "bg-[#131d30] border-[#1e293b] text-gray-300 hover:border-red-500 hover:text-white hover:bg-red-950/40"
                     : "bg-white border-slate-300 text-slate-700 hover:border-red-500 hover:text-red-600 hover:bg-red-50"
-                }`}
+                  }`}
               >
                 [{chip}]
               </button>
@@ -340,9 +334,8 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
                 {messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`flex items-start gap-2.5 ${
-                      msg.sender === "user" ? "flex-row-reverse" : "flex-row"
-                    }`}
+                    className={`flex items-start gap-2.5 ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"
+                      }`}
                   >
                     <Avatar className="w-7 h-7 shrink-0">
                       <AvatarFallback
@@ -350,8 +343,8 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
                           msg.sender === "user"
                             ? "bg-red-600 text-white text-[10px]"
                             : isDark
-                            ? "bg-[#1e293b] text-red-400 text-[10px]"
-                            : "bg-red-50 text-red-600 border border-red-200 text-[10px]"
+                              ? "bg-[#1e293b] text-red-400 text-[10px]"
+                              : "bg-red-50 text-red-600 border border-red-200 text-[10px]"
                         }
                       >
                         {msg.sender === "user" ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
@@ -359,24 +352,22 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
                     </Avatar>
 
                     <div
-                      className={`max-w-[82%] rounded-xl px-3 py-2 text-xs leading-relaxed ${
-                        msg.sender === "user"
+                      className={`max-w-[82%] rounded-xl px-3 py-2 text-xs leading-relaxed ${msg.sender === "user"
                           ? "bg-red-600 text-white rounded-tr-none shadow-sm"
                           : isDark
-                          ? "bg-[#162032] text-gray-200 border border-[#1e293b] rounded-tl-none shadow-sm"
-                          : "bg-slate-100 text-slate-800 border border-slate-200 rounded-tl-none shadow-sm"
-                      }`}
+                            ? "bg-[#162032] text-gray-200 border border-[#1e293b] rounded-tl-none shadow-sm"
+                            : "bg-slate-100 text-slate-800 border border-slate-200 rounded-tl-none shadow-sm"
+                        }`}
                     >
                       <p>{msg.text}</p>
 
                       {/* File Attachment Box & Download Button */}
                       {msg.fileAttachment && (
                         <div
-                          className={`mt-2.5 p-2.5 rounded-lg border flex items-center justify-between gap-2 ${
-                            isDark
+                          className={`mt-2.5 p-2.5 rounded-lg border flex items-center justify-between gap-2 ${isDark
                               ? "bg-[#0b101c] border-red-500/30 text-gray-200"
                               : "bg-white border-red-200 text-slate-800 shadow-xs"
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center gap-2 min-w-0">
                             <FileText className="w-4 h-4 text-red-500 shrink-0" />
@@ -398,9 +389,8 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
                       )}
 
                       <span
-                        className={`text-[9px] block mt-1 text-right ${
-                          msg.sender === "user" ? "text-red-100" : isDark ? "text-gray-400" : "text-slate-400"
-                        }`}
+                        className={`text-[9px] block mt-1 text-right ${msg.sender === "user" ? "text-red-100" : isDark ? "text-gray-400" : "text-slate-400"
+                          }`}
                       >
                         {msg.timestamp}
                       </span>
@@ -423,9 +413,8 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
                       </AvatarFallback>
                     </Avatar>
                     <div
-                      className={`rounded-xl px-3 py-2 text-xs flex items-center gap-2 italic ${
-                        isDark ? "bg-[#162032] text-red-400 border border-[#1e293b]" : "bg-red-50 text-red-600 border border-red-200"
-                      }`}
+                      className={`rounded-xl px-3 py-2 text-xs flex items-center gap-2 italic ${isDark ? "bg-[#162032] text-red-400 border border-[#1e293b]" : "bg-red-50 text-red-600 border border-red-200"
+                        }`}
                     >
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
                       <span>KIRANA sedang memproses...</span>
@@ -438,9 +427,8 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
 
           {/* Input Area */}
           <CardFooter
-            className={`p-3 border-t shrink-0 ${
-              isDark ? "border-[#1e293b] bg-[#0c1220]" : "border-slate-200 bg-white"
-            }`}
+            className={`p-3 border-t shrink-0 ${isDark ? "border-[#1e293b] bg-[#0c1220]" : "border-slate-200 bg-white"
+              }`}
           >
             <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full">
               <Input
@@ -448,11 +436,10 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
                 onChange={(e) => setInputMessage(e.target.value)}
                 placeholder="Tulis pesan atau pilih chip..."
                 disabled={isProcessing}
-                className={`text-xs focus:border-red-500 ${
-                  isDark
+                className={`text-xs focus:border-red-500 ${isDark
                     ? "bg-[#131b2e] border-[#1e293b] text-gray-100 placeholder:text-gray-500"
                     : "bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400 focus:bg-white"
-                }`}
+                  }`}
               />
               <Button
                 type="submit"
@@ -472,7 +459,7 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
           title="Buka KIRANA Agent"
         >
           <MessageSquare className="w-6 h-6" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-amber-400 text-slate-950 rounded-full text-[9px] font-extrabold flex items-center justify-center border-2 border-white shadow-xs">
+          <span className="absolute -top-1 -right-1 w-4 h-4 bg-black text-white dark:bg-white dark:text-black rounded-full text-[9px] font-black flex items-center justify-center border border-red-600 shadow-xs">
             AI
           </span>
         </button>

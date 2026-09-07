@@ -13,10 +13,10 @@ export function BugReportView({ theme }: { theme: "light" | "dark" }) {
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       <div>
-        <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
+        <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-black"}`}>
           Laporan Kendala System & Bug
         </h1>
-        <p className={`text-xs mt-1 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+        <p className={`text-xs mt-1 font-medium ${isDark ? "text-gray-300" : "text-slate-700"}`}>
           Monitoring isu teknis dan feedback pengguna terhadap aplikasi PTP-KPU
         </p>
       </div>
@@ -25,23 +25,23 @@ export function BugReportView({ theme }: { theme: "light" | "dark" }) {
         {reports.map((bug) => (
           <Card key={bug.id} className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
             <CardContent className="p-4 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20">
+              <div className="flex items-center gap-3.5">
+                <div className="p-2.5 rounded-xl bg-red-600 text-white shadow-xs">
                   <Bug className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] font-bold text-red-500">{bug.id}</span>
-                    <span className="text-[10px] font-semibold text-amber-500">Prioritas: {bug.priority}</span>
+                    <span className="font-mono text-[10px] font-black text-red-600 dark:text-red-400">{bug.id}</span>
+                    <span className={`text-[10px] font-bold ${isDark ? "text-gray-300" : "text-black"}`}>Prioritas: {bug.priority}</span>
                   </div>
-                  <h3 className={`text-xs font-bold mt-0.5 ${isDark ? "text-white" : "text-slate-900"}`}>{bug.title}</h3>
-                  <p className={`text-[10px] mt-1 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+                  <h3 className={`text-xs font-bold mt-0.5 ${isDark ? "text-white" : "text-black"}`}>{bug.title}</h3>
+                  <p className={`text-[10px] font-semibold mt-1 ${isDark ? "text-gray-400" : "text-slate-600"}`}>
                     Dilaporkan oleh {bug.reportedBy} • {bug.date}
                   </p>
                 </div>
               </div>
 
-              <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${bug.status === "Selesai" ? "bg-emerald-500/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}`}>
+              <span className={`px-2.5 py-1 rounded-full text-xs font-black ${bug.status === "Selesai" ? "bg-slate-900 text-white dark:bg-white dark:text-black" : "bg-red-600 text-white"}`}>
                 {bug.status}
               </span>
             </CardContent>

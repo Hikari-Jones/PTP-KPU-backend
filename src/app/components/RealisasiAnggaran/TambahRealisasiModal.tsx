@@ -109,15 +109,13 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div
-        className={`w-full max-w-2xl rounded-2xl border shadow-2xl flex flex-col max-h-[90vh] overflow-hidden ${
-          isDark ? "bg-[#0c1220] border-[#1e293b] text-gray-100" : "bg-white border-slate-200 text-slate-800"
-        }`}
+        className={`w-full max-w-2xl rounded-2xl border shadow-2xl flex flex-col max-h-[90vh] overflow-hidden ${isDark ? "bg-[#0c1220] border-[#1e293b] text-gray-100" : "bg-white border-slate-200 text-slate-800"
+          }`}
       >
         {/* Modal Header */}
         <div
-          className={`p-4 border-b flex items-center justify-between ${
-            isDark ? "border-[#1e293b] bg-[#11192b]" : "border-slate-200 bg-slate-50"
-          }`}
+          className={`p-4 border-b flex items-center justify-between ${isDark ? "border-[#1e293b] bg-[#11192b]" : "border-slate-200 bg-slate-50"
+            }`}
         >
           <div>
             <h2 className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
@@ -129,9 +127,8 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
           </div>
           <button
             onClick={onClose}
-            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-              isDark ? "hover:bg-[#1e293b] text-gray-400" : "hover:bg-slate-200 text-slate-500"
-            }`}
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${isDark ? "hover:bg-[#1e293b] text-gray-400" : "hover:bg-slate-200 text-slate-500"
+              }`}
           >
             <X className="w-5 h-5" />
           </button>
@@ -174,9 +171,8 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
               <select
                 value={subbagian}
                 onChange={(e) => setSubbagian(e.target.value)}
-                className={`w-full rounded-lg px-3 py-2 border text-xs ${
-                  isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
-                }`}
+                className={`w-full rounded-lg px-3 py-2 border text-xs ${isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
+                  }`}
               >
                 <option value="Keuangan">Keuangan</option>
                 <option value="Teknis Penyelenggaraan Pemilu">Teknis Penyelenggaraan Pemilu</option>
@@ -192,9 +188,8 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
               <select
                 value={periode}
                 onChange={(e) => setPeriode(e.target.value)}
-                className={`w-full rounded-lg px-3 py-2 border text-xs ${
-                  isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
-                }`}
+                className={`w-full rounded-lg px-3 py-2 border text-xs ${isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
+                  }`}
               >
                 <option value="Agustus 2026">Agustus 2026</option>
                 <option value="Juli 2026">Juli 2026</option>
@@ -210,9 +205,8 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
             <select
               value={selectedKodeAkun}
               onChange={(e) => setSelectedKodeAkun(e.target.value)}
-              className={`w-full rounded-lg px-3 py-2 border text-xs font-mono ${
-                isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
-              }`}
+              className={`w-full rounded-lg px-3 py-2 border text-xs font-mono ${isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
+                }`}
             >
               {akunList.map((akun) => (
                 <option key={akun.kode} value={akun.kode}>
@@ -224,15 +218,15 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
 
           {/* Dynamic Budget Info Card */}
           {selectedAkun && (
-            <Card className={`p-3 border ${isDark ? "bg-[#11192b] border-blue-500/30" : "bg-blue-50/50 border-blue-200"}`}>
+            <Card className={`p-3 border ${isDark ? "bg-[#11192b] border-red-600/30" : "bg-red-50/50 border-red-200"}`}>
               <CardContent className="p-0 flex items-center justify-between text-xs">
                 <div>
-                  <span className="text-[10px] uppercase font-bold text-blue-500 block">Informasi Pagu Akun:</span>
-                  <p className="font-semibold text-slate-300 dark:text-slate-200">{selectedAkun.nama}</p>
+                  <span className="text-[10px] uppercase font-black text-red-600 dark:text-red-400 block">Informasi Pagu Akun:</span>
+                  <p className={`font-bold ${isDark ? "text-white" : "text-black"}`}>{selectedAkun.nama}</p>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-gray-400 block">Total Pagu: {formatRupiah(selectedAkun.pagu)}</span>
-                  <span className={`font-extrabold ${selectedAkun.sisa < 50000000 ? "text-amber-500" : "text-emerald-500"}`}>
+                  <span className={`text-[10px] font-medium block ${isDark ? "text-gray-300" : "text-slate-700"}`}>Total Pagu: {formatRupiah(selectedAkun.pagu)}</span>
+                  <span className={`font-black text-red-600 dark:text-red-400`}>
                     Sisa Anggaran: {formatRupiah(selectedAkun.sisa)}
                   </span>
                 </div>
@@ -242,21 +236,21 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
 
           {/* Usulan Kegiatan & Jumlah Realisasi */}
           <div className="space-y-1.5">
-            <label className="font-semibold block">Usulan Kegiatan / Keterangan Belanja</label>
+            <label className={`font-bold block ${isDark ? "text-white" : "text-black"}`}>Usulan Kegiatan / Keterangan Belanja</label>
             <Input
               type="text"
               placeholder="Contoh: Pengadaan Alat Tulis Rapat Pleno Rekapitulasi"
               value={usulanKegiatan}
               onChange={(e) => setUsulanKegiatan(e.target.value)}
-              className={`text-xs ${isDark ? "bg-[#131b2e] border-[#1e293b]" : "bg-slate-50 border-slate-300"}`}
+              className={`text-xs font-semibold ${isDark ? "bg-[#131b2e] border-[#1e293b] text-white placeholder-gray-400" : "bg-slate-50 border-slate-300 text-black placeholder-slate-500"}`}
             />
           </div>
 
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="font-semibold block">Jumlah Realisasi (Rp)</label>
+              <label className={`font-bold block ${isDark ? "text-white" : "text-black"}`}>Jumlah Realisasi (Rp)</label>
               {isOverBudget && (
-                <span className="text-[10px] font-extrabold text-red-500 bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20 animate-pulse">
+                <span className="text-[10px] font-extrabold text-white bg-red-600 px-2 py-0.5 rounded shadow-xs animate-pulse">
                   ⚠️ Peringatan: Jumlah Melebihi Anggaran!
                 </span>
               )}
@@ -266,41 +260,39 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
               placeholder="0"
               value={jumlahStr}
               onChange={(e) => setJumlahStr(e.target.value)}
-              className={`text-xs font-mono font-bold ${
-                isOverBudget
-                  ? "border-red-500 text-red-500 bg-red-500/10 focus:border-red-600"
+              className={`text-xs font-mono font-bold ${isOverBudget
+                  ? "border-red-600 text-red-600 bg-red-600/10 focus:border-red-600"
                   : isDark
-                  ? "bg-[#131b2e] border-[#1e293b]"
-                  : "bg-slate-50 border-slate-300"
-              }`}
+                    ? "bg-[#131b2e] border-[#1e293b] text-white"
+                    : "bg-slate-50 border-slate-300 text-black"
+                }`}
             />
           </div>
 
           {/* Melampirkan Bukti Transaksi */}
           <div className="space-y-1.5">
-            <label className="font-semibold block">Melampirkan Bukti Transaksi (Image / PDF)</label>
+            <label className={`font-bold block ${isDark ? "text-white" : "text-black"}`}>Melampirkan Bukti Transaksi (Image / PDF)</label>
             <div
-              className={`p-4 border-2 border-dashed rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${
-                fileName
-                  ? "border-emerald-500/40 bg-emerald-500/5 text-emerald-500"
+              className={`p-4 border-2 border-dashed rounded-xl flex flex-col items-center justify-center text-center cursor-pointer transition-colors ${fileName
+                  ? "border-red-600 bg-red-600/10 text-red-600 dark:text-red-400 font-bold"
                   : isDark
-                  ? "border-[#1e293b] bg-[#11192b] hover:border-red-500/40"
-                  : "border-slate-300 bg-slate-50 hover:border-red-300"
-              }`}
+                    ? "border-[#1e293b] bg-[#11192b] hover:border-red-600/50"
+                    : "border-slate-300 bg-slate-50 hover:border-red-600/50"
+                }`}
             >
               <input type="file" onChange={handleFileChange} accept="image/*,.pdf" className="hidden" id="bukti-file-input" />
               <label htmlFor="bukti-file-input" className="cursor-pointer flex flex-col items-center gap-1 w-full">
                 {fileName ? (
                   <>
-                    <FileText className="w-6 h-6 text-emerald-500" />
-                    <span className="font-semibold text-xs text-emerald-500">{fileName}</span>
-                    <span className="text-[10px] text-gray-400">Klik untuk mengganti berkas</span>
+                    <FileText className="w-6 h-6 text-red-600 dark:text-red-400" />
+                    <span className="font-bold text-xs text-red-600 dark:text-red-400">{fileName}</span>
+                    <span className={`text-[10px] ${isDark ? "text-gray-300" : "text-slate-600"}`}>Klik untuk mengganti berkas</span>
                   </>
                 ) : (
                   <>
-                    <Upload className="w-6 h-6 text-red-500" />
-                    <span className="font-semibold text-xs">Pilih File Bukti Transaksi</span>
-                    <span className="text-[10px] text-gray-400">Format: JPG, PNG, PDF (Maks. 10MB)</span>
+                    <Upload className="w-6 h-6 text-red-600" />
+                    <span className={`font-bold text-xs ${isDark ? "text-white" : "text-black"}`}>Pilih File Bukti Transaksi</span>
+                    <span className={`text-[10px] ${isDark ? "text-gray-400" : "text-slate-600"}`}>Format: JPG, PNG, PDF (Maks. 10MB)</span>
                   </>
                 )}
               </label>
@@ -310,15 +302,13 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
 
         {/* Modal Footer (Action Buttons) */}
         <div
-          className={`p-4 border-t flex items-center justify-between shrink-0 ${
-            isDark ? "border-[#1e293b] bg-[#090e1a]" : "border-slate-200 bg-slate-50"
-          }`}
+          className={`p-4 border-t flex items-center justify-between shrink-0 ${isDark ? "border-[#1e293b] bg-[#090e1a]" : "border-slate-200 bg-slate-50"
+            }`}
         >
           <button
             onClick={onClose}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold border cursor-pointer ${
-              isDark ? "border-[#1e293b] bg-[#131b2e] hover:bg-[#1e293b]" : "border-slate-300 bg-white hover:bg-slate-100"
-            }`}
+            className={`px-4 py-2 rounded-xl text-xs font-bold border cursor-pointer transition-all ${isDark ? "border-[#1e293b] bg-[#131b2e] text-white hover:bg-[#1e293b]" : "border-slate-300 bg-white text-black hover:bg-slate-100"
+              }`}
           >
             Batal
           </button>
@@ -328,11 +318,10 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
             <Button
               type="button"
               onClick={handleSimpanDraft}
-              className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 border cursor-pointer transition-all ${
-                isDark
-                  ? "bg-[#131d30] border-amber-500/30 text-amber-400 hover:bg-amber-950/40"
-                  : "bg-amber-50 border-amber-300 text-amber-800 hover:bg-amber-100"
-              }`}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 border cursor-pointer transition-all active:scale-95 ${isDark
+                  ? "bg-slate-900 border-slate-700 text-white hover:bg-slate-800"
+                  : "bg-slate-100 border-slate-300 text-black hover:bg-slate-200"
+                }`}
             >
               <Save className="w-3.5 h-3.5" />
               <span>Simpan Draft</span>
@@ -343,7 +332,7 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
               type="button"
               disabled={isOverBudget}
               onClick={handleKirimVerifikasi}
-              className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-semibold text-xs rounded-xl shadow-md shadow-red-600/30 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md shadow-red-600/30 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Kirim untuk Verifikasi</span>

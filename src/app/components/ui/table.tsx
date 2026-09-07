@@ -9,7 +9,7 @@ export function Table({ className = "", ...props }: React.HTMLAttributes<HTMLTab
 }
 
 export function TableHeader({ className = "", ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
-  return <thead className={`border-b border-[#1e293b] text-xs font-semibold uppercase tracking-wider text-gray-400 ${className}`} {...props} />
+  return <thead className={`border-b border-[#1e293b] text-xs font-semibold uppercase tracking-wider ${className}`} {...props} />
 }
 
 export function TableBody({ className = "", ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
@@ -21,9 +21,9 @@ export function TableRow({ className = "", ...props }: React.HTMLAttributes<HTML
 }
 
 export function TableHead({ className = "", ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {
-  return <th className={`h-10 px-4 text-left align-middle font-medium text-gray-400 ${className}`} {...props} />
+  return <th className={`h-10 px-4 text-left align-middle font-medium ${className}`} {...props} />
 }
 
 export function TableCell({ className = "", ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) {
-  return <td className={`p-4 align-middle text-gray-300 ${className}`} {...props} />
+  return <td className={`p-4 align-middle ${className}`} {...props} />
 }

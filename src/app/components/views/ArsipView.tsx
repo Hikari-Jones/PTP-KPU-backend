@@ -1,4 +1,4 @@
-import { Search, FileText, Download } from "lucide-react"
+import { Search, FileText, Download, ShieldCheck } from "lucide-react"
 import { Card, CardContent } from "../ui/card"
 import { Input } from "../ui/input"
 
@@ -28,10 +28,10 @@ export function ArsipView({ theme }: { theme: "light" | "dark" }) {
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       <div>
-        <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
+        <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-black"}`}>
           Pusat Arsip Dokumen Digital
         </h1>
-        <p className={`text-xs mt-1 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+        <p className={`text-xs mt-1 font-medium ${isDark ? "text-gray-300" : "text-slate-700"}`}>
           Penyimpanan dan verifikasi berkas otentik KPU Sulawesi Utara
         </p>
       </div>
@@ -39,10 +39,10 @@ export function ArsipView({ theme }: { theme: "light" | "dark" }) {
       <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
         <CardContent className="p-4">
           <div className="relative w-full md:w-96">
-            <Search className={`w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 ${isDark ? "text-gray-400" : "text-slate-400"}`} />
+            <Search className={`w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 ${isDark ? "text-gray-400" : "text-slate-600"}`} />
             <Input
               placeholder="Cari berdasarkan kode atau nama dokumen..."
-              className={`pl-9 text-xs ${isDark ? "bg-[#111827] border-[#1e293b]" : "bg-slate-50 border-slate-300"}`}
+              className={`pl-9 text-xs font-medium ${isDark ? "bg-[#111827] border-[#1e293b] text-white" : "bg-slate-50 border-slate-300 text-black placeholder-slate-500"}`}
             />
           </div>
         </CardContent>
@@ -52,30 +52,39 @@ export function ArsipView({ theme }: { theme: "light" | "dark" }) {
         {archives.map((item) => (
           <Card
             key={item.id}
-            className={`transition-all hover:scale-[1.01] ${
-              isDark ? "bg-[#0d1322] border-[#1e293b] hover:border-red-500/40" : "bg-white border-slate-200 shadow-sm hover:border-red-300"
-            }`}
+            className={`transition-all hover:scale-[1.01] ${isDark ? "bg-[#0d1322] border-[#1e293b] hover:border-red-500/40" : "bg-white border-slate-200 shadow-sm hover:border-red-400"
+              }`}
           >
-            <CardContent className="p-5 flex items-start justify-between gap-3">
-              <div className="flex items-start gap-3 min-w-0">
-                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 shrink-0">
+            <CardContent className="p-4 sm:p-5 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5 min-w-0">
+                <div className="p-3 rounded-xl bg-red-600 text-white shrink-0 shadow-sm flex items-center justify-center">
                   <FileText className="w-5 h-5" />
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 flex flex-col justify-center">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-[10px] font-bold text-red-500">{item.id}</span>
-                    <span className="text-[9px] px-2 py-0.2 rounded bg-slate-500/10 text-slate-400 font-medium">{item.category}</span>
+                    <span className="font-mono text-[10px] font-extrabold text-red-600 dark:text-red-400">{item.id}</span>
+                    <span className={`text-[9px] px-2 py-0.5 rounded font-bold ${isDark ? "bg-slate-800 text-gray-200 border border-slate-700" : "bg-slate-100 text-slate-800 border border-slate-300"}`}>
+                      {item.category}
+                    </span>
                   </div>
-                  <h3 className={`text-xs font-bold mt-1 leading-snug truncate ${isDark ? "text-white" : "text-slate-900"}`}>{item.name}</h3>
-                  <p className={`text-[10px] mt-1 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
-                    {item.size} • Diarsip {item.date}
-                  </p>
+                  <h3 className={`text-xs font-bold mt-1 leading-snug truncate ${isDark ? "text-white" : "text-black"}`}>
+                    {item.name}
+                  </h3>
+                  <div className={`text-[10px] font-semibold mt-1 flex items-center gap-1.5 ${isDark ? "text-gray-300" : "text-slate-700"}`}>
+                    <span>{item.size}</span>
+                    <span>•</span>
+                    <span>Diarsip {item.date}</span>
+                    <span>•</span>
+                    <span className="text-red-600 dark:text-red-400 font-bold flex items-center gap-0.5">
+                      <ShieldCheck className="w-3 h-3" /> Terverifikasi
+                    </span>
+                  </div>
                 </div>
               </div>
 
               <button
                 onClick={() => handleDownload(item.name)}
-                className="p-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition-colors cursor-pointer shrink-0"
+                className="p-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white transition-all cursor-pointer shrink-0 shadow-md shadow-red-600/20 active:scale-95 flex items-center justify-center"
                 title="Unduh Arsip"
               >
                 <Download className="w-4 h-4" />

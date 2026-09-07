@@ -83,19 +83,18 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
     <div className="space-y-6">
       {/* Workflow Header Banner */}
       <div className={`p-4 rounded-2xl border ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
-        <h4 className="text-xs font-bold uppercase tracking-wider text-purple-400 mb-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-red-600 dark:text-red-400 mb-3">
           Alur Tanda Tangan Digital (TTE) & Distribusi Berkas
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Step 1 */}
           <div
-            className={`p-3 rounded-xl border flex items-start gap-3 ${
-              surat.tteInfo || signedSuccess
+            className={`p-3 rounded-xl border flex items-start gap-3 ${surat.tteInfo || signedSuccess
                 ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                : "bg-purple-500/10 border-purple-500/30 text-purple-400 animate-pulse"
-            }`}
+                : "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400 animate-pulse"
+              }`}
           >
-            <div className="p-2 rounded-lg bg-purple-500/20 font-bold text-xs shrink-0">1</div>
+            <div className="p-2 rounded-lg bg-red-500/20 font-bold text-xs shrink-0">1</div>
             <div>
               <p className="text-xs font-bold">1. Passphrase & Otorisasi TTE</p>
               <p className="text-[10px] opacity-80">
@@ -106,15 +105,14 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
 
           {/* Step 2 */}
           <div
-            className={`p-3 rounded-xl border flex items-start gap-3 ${
-              surat.tteInfo || signedSuccess
-                ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
+            className={`p-3 rounded-xl border flex items-start gap-3 ${surat.tteInfo || signedSuccess
+                ? "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400"
                 : isDark
-                ? "bg-[#131d30] border-[#1e293b] text-gray-400"
-                : "bg-slate-50 border-slate-200 text-slate-500"
-            }`}
+                  ? "bg-[#131d30] border-[#1e293b] text-gray-400"
+                  : "bg-slate-50 border-slate-200 text-slate-500"
+              }`}
           >
-            <div className="p-2 rounded-lg bg-blue-500/20 font-bold text-xs shrink-0">2</div>
+            <div className="p-2 rounded-lg bg-red-500/20 font-bold text-xs shrink-0">2</div>
             <div>
               <p className="text-xs font-bold">2. Generate Final PDF + Barcode</p>
               <p className="text-[10px] opacity-80">Nomor registrasi & QR tersemat</p>
@@ -123,13 +121,12 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
 
           {/* Step 3 */}
           <div
-            className={`p-3 rounded-xl border flex items-start gap-3 ${
-              surat.status === "terkirim_terarsip"
+            className={`p-3 rounded-xl border flex items-start gap-3 ${surat.status === "terkirim_terarsip"
                 ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
                 : isDark
-                ? "bg-[#131d30] border-[#1e293b] text-gray-400"
-                : "bg-slate-50 border-slate-200 text-slate-500"
-            }`}
+                  ? "bg-[#131d30] border-[#1e293b] text-gray-400"
+                  : "bg-slate-50 border-slate-200 text-slate-500"
+              }`}
           >
             <div className="p-2 rounded-lg bg-emerald-500/20 font-bold text-xs shrink-0">3</div>
             <div>
@@ -144,7 +141,7 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
       <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
         <div className={`p-4 border-b flex items-center justify-between ${isDark ? "border-[#1e293b]" : "border-slate-200"}`}>
           <div className="flex items-center gap-2">
-            <KeyRound className="w-5 h-5 text-purple-400" />
+            <KeyRound className="w-5 h-5 text-red-500" />
             <h3 className="text-sm font-bold">Otorisasi Tanda Tangan Elektronik (TTE BSrE BSSN)</h3>
           </div>
           {surat.tteInfo && <Badge variant="success">Terverifikasi BSrE</Badge>}
@@ -159,9 +156,8 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
                   <select
                     value={penandatangan}
                     onChange={(e) => setPenandatangan(e.target.value)}
-                    className={`w-full px-3 py-2 text-xs rounded-xl border outline-none cursor-pointer ${
-                      isDark ? "bg-[#131d30] border-[#1e293b] text-white" : "bg-slate-50 border-slate-200"
-                    }`}
+                    className={`w-full px-3 py-2 text-xs rounded-xl border outline-none cursor-pointer ${isDark ? "bg-[#131d30] border-[#1e293b] text-white" : "bg-slate-50 border-slate-200"
+                      }`}
                   >
                     <option value="Drs. Meidy Tinangon, M.Si (Ketua KPU)">Drs. Meidy Tinangon, M.Si (Ketua KPU)</option>
                     <option value="Dr. Salman S., M.Si (Sekretaris KPU)">Dr. Salman S., M.Si (Sekretaris KPU)</option>
@@ -178,15 +174,14 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
                     placeholder="Masukkan Passphrase PIN TTE..."
                     value={passphrase}
                     onChange={(e) => setPassphrase(e.target.value)}
-                    className={`w-full px-3 py-2 text-xs rounded-xl border outline-none font-mono ${
-                      isDark ? "bg-[#131d30] border-[#1e293b] focus:border-purple-500" : "bg-slate-50 border-slate-200 focus:border-purple-500"
-                    }`}
+                    className={`w-full px-3 py-2 text-xs rounded-xl border outline-none font-mono ${isDark ? "bg-[#131d30] border-[#1e293b] focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
+                      }`}
                   />
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 shrink-0" />
+              <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-xs flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 shrink-0 text-red-500" />
                 <span>
                   Sistem terhubung secara real-time ke Certification Authority (CA) Balai Sertifikasi Elektronik (BSrE) BSSN.
                 </span>
@@ -195,7 +190,7 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
               <button
                 type="submit"
                 disabled={isSigning}
-                className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98"
+                className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98"
               >
                 {isSigning ? (
                   <span>Proses Verifikasi Enkripsi Hash BSrE...</span>
@@ -241,30 +236,29 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
       <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
         <div className={`p-4 border-b flex items-center justify-between ${isDark ? "border-[#1e293b]" : "border-slate-200"}`}>
           <div className="flex items-center gap-2">
-            <Send className="w-5 h-5 text-blue-400" />
+            <Send className="w-5 h-5 text-red-500" />
             <h3 className="text-sm font-bold">Pengiriman & Distribusi Surat</h3>
           </div>
           {surat.pengiriman && <Badge variant="terkirim">Surat Terkirim & Terarsip</Badge>}
         </div>
 
         <CardContent className="p-5 space-y-4">
-          <p className="text-xs text-gray-400">
+          <p className={`text-xs ${isDark ? "text-gray-400" : "text-slate-600"}`}>
             Pilih kanal distribusi surat resmi. Setelah pengiriman berhasil, status surat otomatis diperbarui menjadi{" "}
-            <strong className="text-emerald-400">"Surat Terkirim & Terarsip"</strong>.
+            <strong className="text-emerald-500">"Surat Terkirim & Terarsip"</strong>.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <button
               onClick={() => onDistribusi(surat.id, "email")}
-              className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col gap-2 ${
-                surat.pengiriman?.metode === "email"
-                  ? "bg-blue-600 text-white border-blue-600"
+              className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col gap-2 ${surat.pengiriman?.metode === "email"
+                  ? "bg-red-600 text-white border-red-600"
                   : isDark
-                  ? "bg-[#131d30] border-[#1e293b] hover:border-blue-500"
-                  : "bg-slate-50 border-slate-200 hover:border-blue-500"
-              }`}
+                    ? "bg-[#131d30] border-[#1e293b] hover:border-red-500"
+                    : "bg-slate-50 border-slate-200 hover:border-red-500"
+                }`}
             >
-              <Mail className="w-5 h-5 text-blue-400" />
+              <Mail className="w-5 h-5 text-red-500" />
               <div>
                 <p className="text-xs font-bold">Email Otomatis</p>
                 <p className="text-[10px] opacity-80">Kirim attachment PDF via server SMTP KPU</p>
@@ -273,15 +267,14 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
 
             <button
               onClick={() => onDistribusi(surat.id, "cetak")}
-              className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col gap-2 ${
-                surat.pengiriman?.metode === "cetak"
-                  ? "bg-blue-600 text-white border-blue-600"
+              className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col gap-2 ${surat.pengiriman?.metode === "cetak"
+                  ? "bg-red-600 text-white border-red-600"
                   : isDark
-                  ? "bg-[#131d30] border-[#1e293b] hover:border-blue-500"
-                  : "bg-slate-50 border-slate-200 hover:border-blue-500"
-              }`}
+                    ? "bg-[#131d30] border-[#1e293b] hover:border-red-500"
+                    : "bg-slate-50 border-slate-200 hover:border-red-500"
+                }`}
             >
-              <Printer className="w-5 h-5 text-amber-400" />
+              <Printer className="w-5 h-5 text-slate-600 dark:text-slate-300" />
               <div>
                 <p className="text-xs font-bold">Cetak Fisik / Kurir</p>
                 <p className="text-[10px] opacity-80">Cetak lembar tanda terima kurir expedisi</p>
@@ -290,15 +283,14 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
 
             <button
               onClick={() => onDistribusi(surat.id, "internal")}
-              className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col gap-2 ${
-                surat.pengiriman?.metode === "internal"
-                  ? "bg-blue-600 text-white border-blue-600"
+              className={`p-4 rounded-xl border text-left transition-all cursor-pointer flex flex-col gap-2 ${surat.pengiriman?.metode === "internal"
+                  ? "bg-red-600 text-white border-red-600"
                   : isDark
-                  ? "bg-[#131d30] border-[#1e293b] hover:border-blue-500"
-                  : "bg-slate-50 border-slate-200 hover:border-blue-500"
-              }`}
+                    ? "bg-[#131d30] border-[#1e293b] hover:border-red-500"
+                    : "bg-slate-50 border-slate-200 hover:border-red-500"
+                }`}
             >
-              <Building className="w-5 h-5 text-emerald-400" />
+              <Building className="w-5 h-5 text-slate-600 dark:text-slate-300" />
               <div>
                 <p className="text-xs font-bold">Kirim Internal PTP</p>
                 <p className="text-[10px] opacity-80">Notifikasi dashboard unit/subbag internal</p>

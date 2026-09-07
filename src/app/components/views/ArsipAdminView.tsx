@@ -14,15 +14,15 @@ export function ArsipAdminView({ theme }: { theme: "light" | "dark" }) {
     <div className="space-y-6 animate-in fade-in duration-200">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
+          <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-black"}`}>
             Arsip Admin & Cadangan Sistem
           </h1>
-          <p className={`text-xs mt-1 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+          <p className={`text-xs mt-1 font-medium ${isDark ? "text-gray-300" : "text-slate-700"}`}>
             Manajemen backup database berkala dan arsip terenkripsi tingkat administrator
           </p>
         </div>
-        <button className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs rounded-xl shadow-md shadow-red-600/30 flex items-center gap-2 cursor-pointer shrink-0">
-          <RefreshCw className="w-4 h-4 animate-spin-slow" />
+        <button className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md shadow-red-600/30 flex items-center gap-2 cursor-pointer shrink-0 transition-all active:scale-95">
+          <RefreshCw className="w-4 h-4" />
           <span>Jalankan Backup Sekarang</span>
         </button>
       </div>
@@ -31,20 +31,20 @@ export function ArsipAdminView({ theme }: { theme: "light" | "dark" }) {
         {backups.map((item) => (
           <Card key={item.id} className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
             <CardContent className="p-4 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-500 border border-purple-500/20">
+              <div className="flex items-center gap-3.5">
+                <div className="p-2.5 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-xs">
                   <HardDrive className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className={`text-xs font-bold ${isDark ? "text-white" : "text-slate-900"}`}>{item.id}</h3>
-                  <p className={`text-[10px] mt-0.5 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+                  <h3 className={`text-xs font-bold ${isDark ? "text-white" : "text-black"}`}>{item.id}</h3>
+                  <p className={`text-[10px] font-semibold mt-0.5 ${isDark ? "text-gray-400" : "text-slate-600"}`}>
                     {item.type} • {item.size}
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-[10px] font-semibold text-emerald-500 flex items-center gap-1">
+                <span className="text-[10px] font-bold text-red-600 dark:text-red-400 flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   {item.status}
                 </span>
@@ -60,7 +60,7 @@ export function ArsipAdminView({ theme }: { theme: "light" | "dark" }) {
                     document.body.removeChild(a)
                     URL.revokeObjectURL(url)
                   }}
-                  className="p-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs cursor-pointer"
+                  className="p-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs cursor-pointer shadow-xs transition-all active:scale-95"
                   title="Unduh Backup SQL"
                 >
                   <Download className="w-3.5 h-3.5" />

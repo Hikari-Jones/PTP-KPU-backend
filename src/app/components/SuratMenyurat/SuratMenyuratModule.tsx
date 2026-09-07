@@ -349,9 +349,8 @@ export function SuratMenyuratModule({ theme, subTab = "ringkasan" }: SuratMenyur
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setSelectedSurat(null)}
-                className={`p-2 rounded-xl border transition-colors cursor-pointer ${
-                  isDark ? "bg-[#0d1322] border-[#1e293b] text-gray-300 hover:bg-[#131d30]" : "bg-white border-slate-200 text-slate-700 hover:bg-slate-100"
-                }`}
+                className={`p-2 rounded-xl border transition-colors cursor-pointer ${isDark ? "bg-[#0d1322] border-[#1e293b] text-gray-300 hover:bg-[#131d30]" : "bg-white border-slate-200 text-slate-700 hover:bg-slate-100"
+                  }`}
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
@@ -370,9 +369,8 @@ export function SuratMenyuratModule({ theme, subTab = "ringkasan" }: SuratMenyur
             <div className="flex items-center gap-2">
               <button
                 onClick={() => window.print()}
-                className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 cursor-pointer ${
-                  isDark ? "bg-[#0d1322] border-[#1e293b] text-gray-300 hover:bg-[#131d30]" : "bg-white border-slate-200 text-slate-700 hover:bg-slate-100"
-                }`}
+                className={`px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 cursor-pointer ${isDark ? "bg-[#0d1322] border-[#1e293b] text-gray-300 hover:bg-[#131d30]" : "bg-white border-slate-200 text-slate-700 hover:bg-slate-100"
+                  }`}
               >
                 <Printer className="w-4 h-4" />
                 <span>Cetak Lembar Disposisi</span>
@@ -397,13 +395,12 @@ export function SuratMenyuratModule({ theme, subTab = "ringkasan" }: SuratMenyur
                   <button
                     key={tab.id}
                     onClick={() => setActiveDetailTab(tab.id as any)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
-                      isActive
+                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${isActive
                         ? "bg-red-600 text-white shadow-md"
                         : isDark
-                        ? "text-gray-400 hover:bg-[#131d30] hover:text-white"
-                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                    }`}
+                          ? "text-gray-400 hover:bg-[#131d30] hover:text-white"
+                          : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                      }`}
                   >
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>

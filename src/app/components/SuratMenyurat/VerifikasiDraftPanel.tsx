@@ -70,11 +70,10 @@ export function VerifikasiDraftPanel({
 
           {/* Step 2 */}
           <div
-            className={`p-3 rounded-xl border flex items-start gap-3 ${
-              surat.status === "draft" || surat.status === "revisi"
+            className={`p-3 rounded-xl border flex items-start gap-3 ${surat.status === "draft" || surat.status === "revisi"
                 ? "bg-amber-500/10 border-amber-500/30 text-amber-400 animate-pulse"
                 : "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-            }`}
+              }`}
           >
             <div className="p-2 rounded-lg bg-amber-500/20 font-bold text-xs shrink-0">2</div>
             <div>
@@ -83,23 +82,22 @@ export function VerifikasiDraftPanel({
                 {surat.status === "revisi"
                   ? "Status: Perlu Revisi Konseptor"
                   : surat.status === "draft"
-                  ? "Menunggu Keputusan Pejabat"
-                  : "Draft Disetujui"}
+                    ? "Menunggu Keputusan Pejabat"
+                    : "Draft Disetujui"}
               </p>
             </div>
           </div>
 
           {/* Step 3 */}
           <div
-            className={`p-3 rounded-xl border flex items-start gap-3 ${
-              surat.status === "menunggu_tte" || surat.status === "terkirim_terarsip"
-                ? "bg-purple-500/10 border-purple-500/30 text-purple-400"
+            className={`p-3 rounded-xl border flex items-start gap-3 ${surat.status === "menunggu_tte" || surat.status === "terkirim_terarsip"
+                ? "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400"
                 : isDark
-                ? "bg-[#131d30] border-[#1e293b] text-gray-400"
-                : "bg-slate-50 border-slate-200 text-slate-500"
-            }`}
+                  ? "bg-[#131d30] border-[#1e293b] text-gray-400"
+                  : "bg-slate-50 border-slate-200 text-slate-500"
+              }`}
           >
-            <div className="p-2 rounded-lg bg-purple-500/20 font-bold text-xs shrink-0">3</div>
+            <div className="p-2 rounded-lg bg-red-500/20 font-bold text-xs shrink-0">3</div>
             <div>
               <p className="text-xs font-bold">3. Penomoran Otomatis & TTE</p>
               <p className="text-[10px] opacity-80">Siap untuk pengesahan digital</p>
@@ -184,9 +182,8 @@ export function VerifikasiDraftPanel({
                   placeholder="Tuliskan poin-poin yang perlu diperbaiki oleh konseptor..."
                   value={catatanRevisi}
                   onChange={(e) => setCatatanRevisi(e.target.value)}
-                  className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${
-                    isDark ? "bg-[#131d30] border-[#1e293b] text-white focus:border-red-500" : "bg-white border-slate-300 focus:border-red-500"
-                  }`}
+                  className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${isDark ? "bg-[#131d30] border-[#1e293b] text-white focus:border-red-500" : "bg-white border-slate-300 focus:border-red-500"
+                    }`}
                 />
                 <div className="flex items-center gap-2 justify-end">
                   <button

@@ -33,7 +33,7 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
   }
 
   const handleDownloadExcel = () => {
-  let csv = "No_Dokumen,Tanggal,Kode_Akun,Nama_Akun,Subbagian,Usulan_Kegiatan,Jumlah_Realisasi_Rp,Status,Periode\n"
+    let csv = "No_Dokumen,Tanggal,Kode_Akun,Nama_Akun,Subbagian,Usulan_Kegiatan,Jumlah_Realisasi_Rp,Status,Periode\n"
     filteredList.forEach((t) => {
       csv += `"${t.noDokumen}","${t.tanggal}","${t.kodeAkun}","${t.namaAkun}","${t.subbagian}","${t.usulanKegiatan}",${t.jumlah},"${t.status}","${t.periode}"\n`
     })
@@ -50,36 +50,33 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-200">
       <div
-        className={`w-full max-w-4xl rounded-2xl border shadow-2xl flex flex-col max-h-[90vh] overflow-hidden ${
-          isDark ? "bg-[#0c1220] border-[#1e293b] text-gray-100" : "bg-white border-slate-200 text-slate-800"
-        }`}
+        className={`w-full max-w-4xl rounded-2xl border shadow-2xl flex flex-col max-h-[90vh] overflow-hidden ${isDark ? "bg-[#0c1220] border-[#1e293b] text-white" : "bg-white border-slate-200 text-black"
+          }`}
       >
         {/* Modal Header */}
         <div
-          className={`p-4 border-b flex items-center justify-between ${
-            isDark ? "border-[#1e293b] bg-[#11192b]" : "border-slate-200 bg-slate-50"
-          }`}
+          className={`p-4 border-b flex items-center justify-between ${isDark ? "border-[#1e293b] bg-[#11192b]" : "border-slate-200 bg-slate-50"
+            }`}
         >
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+            <div className="p-2 rounded-lg bg-red-600 text-white shadow-xs">
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <div>
-              <h2 className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
+              <h2 className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-black"}`}>
                 Laporan Bulanan Realisasi Anggaran
               </h2>
-              <p className={`text-[11px] ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+              <p className={`text-[11px] font-medium ${isDark ? "text-gray-300" : "text-slate-700"}`}>
                 Rekapitulasi rincian transaksi penyerapan anggaran per periode dan subbagian
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-              isDark ? "hover:bg-[#1e293b] text-gray-400" : "hover:bg-slate-200 text-slate-500"
-            }`}
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${isDark ? "hover:bg-[#1e293b] text-gray-300" : "hover:bg-slate-200 text-slate-700"
+              }`}
           >
             <X className="w-5 h-5" />
           </button>
@@ -87,12 +84,11 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
 
         {/* Modal Filters */}
         <div
-          className={`p-4 border-b flex flex-wrap items-center justify-between gap-3 ${
-            isDark ? "bg-[#090e1a] border-[#1e293b]" : "bg-slate-100/60 border-slate-200"
-          }`}
+          className={`p-4 border-b flex flex-wrap items-center justify-between gap-3 ${isDark ? "bg-[#090e1a] border-[#1e293b]" : "bg-slate-100/80 border-slate-200"
+            }`}
         >
           <div className="flex flex-wrap items-center gap-3 text-xs">
-            <div className="flex items-center gap-1.5 font-semibold text-slate-400">
+            <div className="flex items-center gap-1.5 font-bold text-red-600">
               <Filter className="w-3.5 h-3.5" /> Filter:
             </div>
 
@@ -100,9 +96,8 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
               <select
                 value={selectedPeriode}
                 onChange={(e) => setSelectedPeriode(e.target.value)}
-                className={`rounded-lg px-2.5 py-1.5 border text-xs ${
-                  isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-white border-slate-300 text-slate-800"
-                }`}
+                className={`rounded-lg px-2.5 py-1.5 border text-xs font-bold ${isDark ? "bg-[#131b2e] border-[#1e293b] text-white" : "bg-white border-slate-300 text-black"
+                  }`}
               >
                 <option value="Semua">Semua Periode</option>
                 <option value="Agustus 2026">Agustus 2026</option>
@@ -116,24 +111,23 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
               <select
                 value={selectedSubbagian}
                 onChange={(e) => setSelectedSubbagian(e.target.value)}
-                className={`rounded-lg px-2.5 py-1.5 border text-xs ${
-                  isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-white border-slate-300 text-slate-800"
-                }`}
+                className={`rounded-lg px-2.5 py-1.5 border text-xs font-bold ${isDark ? "bg-[#131b2e] border-[#1e293b] text-white" : "bg-white border-slate-300 text-black"
+                  }`}
               >
                 <option value="Semua">Semua Subbagian</option>
                 <option value="Keuangan">Keuangan</option>
                 <option value="Teknis Penyelenggaraan Pemilu">Teknis Penyelenggaraan Pemilu</option>
-                <option value="SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)">SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)</option>
-                <option value="PERDATIN (Perencanaan, Data dan Informasi)">PERDATIN (Perencanaan, Data dan Informasi)</option>
+                <option value="SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)">SDM</option>
+                <option value="PERDATIN (Perencanaan, Data dan Informasi)">PERDATIN</option>
                 <option value="Hukum">Hukum</option>
-                <option value="UMLOG (Umum dan Logistik)">UMLOG (Umum dan Logistik)</option>
+                <option value="UMLOG (Umum dan Logistik)">UMLOG</option>
               </select>
             </div>
           </div>
 
           <button
             onClick={handleDownloadExcel}
-            className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-sm flex items-center gap-1.5 cursor-pointer transition-all shrink-0"
+            className="px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-sm flex items-center gap-1.5 cursor-pointer transition-all shrink-0 active:scale-95"
           >
             <Download className="w-4 h-4" />
             <span>Unduh Laporan (.xlsx / .csv)</span>
@@ -146,14 +140,14 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className={isDark ? "border-b border-[#1e293b]" : "border-b border-slate-200 bg-slate-50"}>
-                    <TableHead className="text-[11px]">No. Dokumen</TableHead>
-                    <TableHead className="text-[11px]">Tanggal</TableHead>
-                    <TableHead className="text-[11px]">Kode & Nama Akun</TableHead>
-                    <TableHead className="text-[11px]">Subbagian</TableHead>
-                    <TableHead className="text-[11px]">Usulan Kegiatan</TableHead>
-                    <TableHead className="text-[11px]">Jumlah (Rp)</TableHead>
-                    <TableHead className="text-[11px]">Status</TableHead>
+                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>No. Dokumen</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Tanggal</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Kode & Nama Akun</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Subbagian</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Usulan Kegiatan</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Jumlah (Rp)</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -171,15 +165,15 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
                           isDark ? "border-b border-[#1e293b]/40 hover:bg-[#131d30]" : "border-b border-slate-100 hover:bg-slate-50"
                         }
                       >
-                        <TableCell className="font-mono text-xs font-bold text-red-500">{item.noDokumen}</TableCell>
-                        <TableCell className="text-xs whitespace-nowrap">{item.tanggal}</TableCell>
+                        <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400">{item.noDokumen}</TableCell>
+                        <TableCell className={`text-xs font-semibold whitespace-nowrap ${isDark ? "text-gray-300" : "text-black"}`}>{item.tanggal}</TableCell>
                         <TableCell className="text-xs">
-                          <span className="font-mono font-bold block">{item.kodeAkun}</span>
-                          <span className="text-[10px] text-gray-400">{item.namaAkun}</span>
+                          <span className={`font-mono font-bold block ${isDark ? "text-white" : "text-black"}`}>{item.kodeAkun}</span>
+                          <span className={`text-[11px] font-semibold ${isDark ? "text-gray-300" : "text-slate-800"}`}>{item.namaAkun}</span>
                         </TableCell>
-                        <TableCell className="text-xs text-slate-400">{item.subbagian}</TableCell>
-                        <TableCell className="font-medium text-xs max-w-xs truncate">{item.usulanKegiatan}</TableCell>
-                        <TableCell className="text-xs font-extrabold text-emerald-500 whitespace-nowrap">
+                        <TableCell className={`text-xs font-bold ${isDark ? "text-gray-200" : "text-black"}`}>{item.subbagian}</TableCell>
+                        <TableCell className={`font-bold text-xs max-w-xs truncate ${isDark ? "text-white" : "text-black"}`}>{item.usulanKegiatan}</TableCell>
+                        <TableCell className="text-xs font-black text-red-600 dark:text-red-500 whitespace-nowrap">
                           {formatRupiah(item.jumlah)}
                         </TableCell>
                         <TableCell>
@@ -188,10 +182,10 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
                               item.status === "Disetujui"
                                 ? "terkirim"
                                 : item.status === "Menunggu Verifikasi"
-                                ? "diproses"
-                                : item.status === "Draft"
-                                ? "draft"
-                                : "diterima"
+                                  ? "diproses"
+                                  : item.status === "Draft"
+                                    ? "draft"
+                                    : "diterima"
                             }
                           >
                             {item.status}
@@ -208,12 +202,11 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
 
         {/* Modal Footer Summary */}
         <div
-          className={`p-4 border-t flex items-center justify-between shrink-0 text-xs font-bold ${
-            isDark ? "border-[#1e293b] bg-[#11192b] text-gray-200" : "border-slate-200 bg-slate-50 text-slate-800"
-          }`}
+          className={`p-4 border-t flex items-center justify-between shrink-0 text-xs font-bold ${isDark ? "border-[#1e293b] bg-[#11192b] text-white" : "border-slate-200 bg-slate-50 text-black"
+            }`}
         >
           <span>Total Realisasi Terfilter ({filteredList.length} Transaksi):</span>
-          <span className="text-sm font-extrabold text-emerald-500">{formatRupiah(totalJumlah)}</span>
+          <span className="text-base font-black text-red-600 dark:text-red-500">{formatRupiah(totalJumlah)}</span>
         </div>
       </div>
     </div>

@@ -2,12 +2,14 @@ import { useState } from "react"
 import {
   ChevronDown,
   TrendingUp,
-  ArrowUpRight,
   FileText,
   Filter,
   Search,
   Plus,
-  FileSpreadsheet
+  FileSpreadsheet,
+  PieChart,
+  Layers,
+  Wallet
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
@@ -23,29 +25,13 @@ interface Props {
   subTab?: RealisasiSubTab
 }
 
-// Visual reference datasets matching Figma specs
-const MONTHLY_TREND_DATA = [
-  { month: "Jan", realisasi: 2.1, target: 3.8 },
-  { month: "Feb", realisasi: 2.8, target: 3.8 },
-  { month: "Mar", realisasi: 3.4, target: 3.8 },
-  { month: "Apr", realisasi: 3.1, target: 3.8 },
-  { month: "Mei", realisasi: 3.9, target: 3.8 },
-  { month: "Jun", realisasi: 4.2, target: 3.8 },
-  { month: "Jul", realisasi: 3.7, target: 3.8 },
-  { month: "Agu", realisasi: 4.1, target: 3.8 },
-  { month: "Sep", realisasi: 3.95, target: 3.8 },
-  { month: "Okt", realisasi: 0.0, target: 3.8 },
-  { month: "Nov", realisasi: 0.0, target: 3.8 },
-  { month: "Des", realisasi: 0.0, target: 3.8 },
-]
-
 const SERAPAN_SUBBAGIAN_DATA = [
-  { nama: "Keuangan", pct: 70, realisasi: "10.36", pagu: "14.80", color: "bg-red-500" },
-  { nama: "Teknis Penyelenggaraan Pemilu", pct: 78, realisasi: "9.67", pagu: "12.40", color: "bg-red-600" },
-  { nama: "SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)", pct: 64, realisasi: "5.89", pagu: "9.20", color: "bg-amber-500" },
-  { nama: "PERDATIN (Perencanaan, Data dan Informasi)", pct: 68, realisasi: "5.17", pagu: "7.60", color: "bg-blue-500" },
-  { nama: "Hukum", pct: 65, realisasi: "3.76", pagu: "5.78", color: "bg-emerald-500" },
-  { nama: "UMLOG (Umum dan Logistik)", pct: 55, realisasi: "4.10", pagu: "6.20", color: "bg-sky-500" },
+  { nama: "Keuangan", pct: 70, realisasi: "10.36", pagu: "14.80", color: "bg-red-600" },
+  { nama: "Teknis Penyelenggaraan Pemilu", pct: 78, realisasi: "9.67", pagu: "12.40", color: "bg-red-700" },
+  { nama: "SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)", pct: 64, realisasi: "5.89", pagu: "9.20", color: "bg-slate-900 dark:bg-white" },
+  { nama: "PERDATIN (Perencanaan, Data dan Informasi)", pct: 68, realisasi: "5.17", pagu: "7.60", color: "bg-red-600" },
+  { nama: "Hukum", pct: 65, realisasi: "3.76", pagu: "5.78", color: "bg-slate-800 dark:bg-slate-300" },
+  { nama: "UMLOG (Umum dan Logistik)", pct: 55, realisasi: "4.10", pagu: "6.20", color: "bg-red-500" },
 ]
 
 const TOP_AKUN_DATA = [
@@ -154,18 +140,29 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
     setTransaksiList((prev) => [newTrx, ...prev])
   }
 
+  // Filtered transactions for "transaksi" tab
+  const filteredTransactions = transaksiList.filter((item) => {
+    const matchesSub = filterSubbagian === "Semua" || item.subbagian.toLowerCase().includes(filterSubbagian.toLowerCase())
+    const matchesSearch =
+      item.noDokumen.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.namaAkun.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.usulanKegiatan.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.kodeAkun.includes(searchQuery)
+    return matchesSub && matchesSearch
+  })
+
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
       {/* Dynamic Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
+          <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-black"}`}>
             Realisasi Anggaran {subTab === "ringkasan" && "— Ringkasan Overview"}
             {subTab === "transaksi" && "— Daftar Transaksi"}
             {subTab === "laporan" && "— Laporan Bulanan"}
             {subTab === "verifikasi" && "— Verifikasi Dokumen"}
           </h1>
-          <p className={`text-xs mt-1 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+          <p className={`text-xs mt-1 font-medium ${isDark ? "text-gray-300" : "text-slate-700"}`}>
             Portal Pemantauan & Transaksi Realisasi Anggaran PTP KPU Provinsi Sulawesi Utara
           </p>
         </div>
@@ -174,7 +171,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsFormOpen(true)}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold text-xs rounded-xl shadow-lg shadow-red-600/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95"
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-red-600/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Realisasi</span>
@@ -182,28 +179,26 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
 
           <button
             onClick={() => setIsLaporanOpen(true)}
-            className={`px-4 py-2 rounded-xl border text-xs font-semibold flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 shadow-sm ${
-              isDark
-                ? "border-emerald-500/40 bg-emerald-950/20 text-emerald-400 hover:bg-emerald-950/40"
-                : "border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
-            }`}
+            className={`px-4 py-2 rounded-xl border text-xs font-bold flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 shadow-sm ${isDark
+                ? "border-slate-700 bg-slate-900 text-white hover:bg-slate-800"
+                : "border-slate-300 bg-white text-black hover:bg-slate-50"
+              }`}
           >
-            <FileSpreadsheet className="w-4 h-4 text-emerald-500" />
+            <FileSpreadsheet className="w-4 h-4 text-red-600" />
             <span>Laporan Bulanan</span>
           </button>
         </div>
       </div>
 
       {/* ========================================================================= */}
-      {/* 1. RINGKASAN SUBTAB (FIGMA MATCHING DESIGN) */}
+      {/* 1. RINGKASAN SUBTAB */}
       {/* ========================================================================= */}
       {(subTab === "ringkasan" || !subTab) && (
         <div className="space-y-6">
           {/* Top Filter Area */}
           <div
-            className={`p-4 rounded-2xl border flex flex-wrap items-center justify-between gap-4 ${
-              isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-            }`}
+            className={`p-4 rounded-2xl border flex flex-wrap items-center justify-between gap-4 ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
+              }`}
           >
             <div className="flex flex-wrap items-center gap-3">
               {/* TA Dropdown */}
@@ -211,38 +206,36 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                 <select
                   value={selectedTA}
                   onChange={(e) => setSelectedTA(e.target.value)}
-                  className={`appearance-none font-semibold text-xs px-3.5 py-2 pr-8 rounded-xl border cursor-pointer ${
-                    isDark
-                      ? "bg-[#131b2e] border-[#1e293b] text-gray-100 hover:border-red-500"
-                      : "bg-slate-50 border-slate-300 text-slate-800 hover:border-red-500"
-                  }`}
+                  className={`appearance-none font-bold text-xs px-3.5 py-2 pr-8 rounded-xl border cursor-pointer ${isDark
+                      ? "bg-[#131b2e] border-[#1e293b] text-white hover:border-red-500"
+                      : "bg-slate-50 border-slate-300 text-black hover:border-red-500"
+                    }`}
                 >
                   <option value="TA 2025">TA 2025</option>
                   <option value="TA 2026">TA 2026</option>
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
               </div>
 
               {/* Subbagian Dropdown */}
               <div className="relative">
                 <select
                   value={selectedSubbagianFilter}
-                    onChange={(e) => setSelectedSubbagianFilter(e.target.value)}
-                  className={`appearance-none font-medium text-xs px-3.5 py-2 pr-8 rounded-xl border cursor-pointer ${
-                    isDark
-                      ? "bg-[#131b2e] border-[#1e293b] text-gray-100 hover:border-red-500"
-                      : "bg-slate-50 border-slate-300 text-slate-800 hover:border-red-500"
-                  }`}
+                  onChange={(e) => setSelectedSubbagianFilter(e.target.value)}
+                  className={`appearance-none font-bold text-xs px-3.5 py-2 pr-8 rounded-xl border cursor-pointer ${isDark
+                      ? "bg-[#131b2e] border-[#1e293b] text-white hover:border-red-500"
+                      : "bg-slate-50 border-slate-300 text-black hover:border-red-500"
+                    }`}
                 >
-                    <option value="Semua Subbagian">Semua Subbagian</option>
+                  <option value="Semua Subbagian">Semua Subbagian</option>
                   <option value="Keuangan">Keuangan</option>
                   <option value="Teknis Penyelenggaraan Pemilu">Teknis Penyelenggaraan Pemilu</option>
-                  <option value="SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)">SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)</option>
-                  <option value="PERDATIN (Perencanaan, Data dan Informasi)">PERDATIN (Perencanaan, Data dan Informasi)</option>
+                  <option value="SDM (Partisipasi Hubungsn Masyarakat dan Sumber Daya Manusia)">SDM</option>
+                  <option value="PERDATIN (Perencanaan, Data dan Informasi)">PERDATIN</option>
                   <option value="Hukum">Hukum</option>
-                  <option value="UMLOG (Umum dan Logistik)">UMLOG (Umum dan Logistik)</option>
+                  <option value="UMLOG (Umum dan Logistik)">UMLOG</option>
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
               </div>
 
               {/* Program Dropdown */}
@@ -250,65 +243,61 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                 <select
                   value={selectedProgramFilter}
                   onChange={(e) => setSelectedProgramFilter(e.target.value)}
-                  className={`appearance-none font-medium text-xs px-3.5 py-2 pr-8 rounded-xl border cursor-pointer ${
-                    isDark
-                      ? "bg-[#131b2e] border-[#1e293b] text-gray-100 hover:border-red-500"
-                      : "bg-slate-50 border-slate-300 text-slate-800 hover:border-red-500"
-                  }`}
+                  className={`appearance-none font-bold text-xs px-3.5 py-2 pr-8 rounded-xl border cursor-pointer ${isDark
+                      ? "bg-[#131b2e] border-[#1e293b] text-white hover:border-red-500"
+                      : "bg-slate-50 border-slate-300 text-black hover:border-red-500"
+                    }`}
                 >
                   <option value="Semua Program">Semua Program</option>
                   <option value="Program Dukungan Manajemen">Program Dukungan Manajemen</option>
                   <option value="Program Penyelenggaraan Pemilu">Program Penyelenggaraan Pemilu</option>
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
               </div>
             </div>
 
             {/* Date Range Picker Controls */}
-            <div className="flex items-center gap-2 text-xs font-medium">
+            <div className="flex items-center gap-2 text-xs font-bold">
               <div className="relative flex items-center">
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className={`px-3 py-1.5 rounded-xl border text-xs outline-none ${
-                    isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
-                  }`}
+                  className={`px-3 py-1.5 rounded-xl border text-xs outline-none font-semibold ${isDark ? "bg-[#131b2e] border-[#1e293b] text-white" : "bg-slate-50 border-slate-300 text-black"
+                    }`}
                 />
               </div>
-              <span className={isDark ? "text-gray-400" : "text-slate-500"}>s/d</span>
+              <span className={isDark ? "text-gray-300" : "text-black"}>s/d</span>
               <div className="relative flex items-center">
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className={`px-3 py-1.5 rounded-xl border text-xs outline-none ${
-                    isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
-                  }`}
+                  className={`px-3 py-1.5 rounded-xl border text-xs outline-none font-semibold ${isDark ? "bg-[#131b2e] border-[#1e293b] text-white" : "bg-slate-50 border-slate-300 text-black"
+                    }`}
                 />
               </div>
             </div>
           </div>
 
-          {/* 4 KPI Summary Cards (Matching Figma layout & colors) */}
+          {/* 4 KPI Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Card 1: TOTAL PAGU ANGGARAN */}
-            <Card className={`relative overflow-hidden transition-all ${
-              isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-            }`}>
-              <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500"></div>
-              <CardContent className="p-5 pl-6 flex flex-col justify-between h-full">
+            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
+              }`}>
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-900 dark:bg-slate-400"></div>
+              <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
-                  <p className="text-[11px] font-bold tracking-wider uppercase text-blue-400">
+                  <p className={`text-[11px] font-extrabold tracking-wider uppercase ${isDark ? "text-gray-300" : "text-slate-900"}`}>
                     Total Pagu Anggaran
                   </p>
-                  <h2 className={`text-2xl font-black mt-2 tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
+                  <h2 className={`text-2xl font-black mt-1 tracking-tight ${isDark ? "text-white" : "text-black"}`}>
                     Rp 45.78 M
                   </h2>
                 </div>
-                <div className="mt-4 pt-3 border-t border-slate-800/40 flex items-center justify-between text-xs">
-                  <span className="text-gray-400 font-medium">TA 2025</span>
-                  <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-[10px] font-bold border border-blue-500/20">
+                <div className={`pt-2.5 border-t flex items-center justify-between text-xs ${isDark ? "border-slate-800" : "border-slate-200"}`}>
+                  <span className={`font-bold ${isDark ? "text-gray-300" : "text-black"}`}>TA 2025</span>
+                  <span className="px-2 py-0.5 rounded bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-[10px] font-bold">
                     Alokasi PTP
                   </span>
                 </div>
@@ -316,22 +305,21 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             </Card>
 
             {/* Card 2: TOTAL REALISASI */}
-            <Card className={`relative overflow-hidden transition-all ${
-              isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-            }`}>
-              <div className="absolute top-0 left-0 w-1.5 h-full bg-red-500"></div>
-              <CardContent className="p-5 pl-6 flex flex-col justify-between h-full">
+            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
+              }`}>
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
+              <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
-                  <p className="text-[11px] font-bold tracking-wider uppercase text-red-400">
+                  <p className="text-[11px] font-extrabold tracking-wider uppercase text-red-600 dark:text-red-400">
                     Total Realisasi
                   </p>
-                  <h2 className="text-2xl font-black mt-2 tracking-tight text-red-500">
+                  <h2 className="text-2xl font-black mt-1 tracking-tight text-red-600 dark:text-red-500">
                     Rp 31.25 M
                   </h2>
                 </div>
-                <div className="mt-4 pt-3 border-t border-slate-800/40 flex items-center justify-between text-xs">
-                  <span className="text-gray-400 font-medium">s.d. September 2025</span>
-                  <span className="text-emerald-400 font-bold text-xs flex items-center gap-1">
+                <div className={`pt-2.5 border-t flex items-center justify-between text-xs ${isDark ? "border-slate-800" : "border-slate-200"}`}>
+                  <span className={`font-bold ${isDark ? "text-gray-300" : "text-black"}`}>s.d. September 2025</span>
+                  <span className="text-red-600 dark:text-red-400 font-black text-xs flex items-center gap-1">
                     <TrendingUp className="w-3.5 h-3.5" />
                     68.3% terserap
                   </span>
@@ -340,135 +328,62 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             </Card>
 
             {/* Card 3: SISA ANGGARAN */}
-            <Card className={`relative overflow-hidden transition-all ${
-              isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-            }`}>
-              <div className="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
-              <CardContent className="p-5 pl-6 flex flex-col justify-between h-full">
+            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
+              }`}>
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-900 dark:bg-slate-400"></div>
+              <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
-                  <p className="text-[11px] font-bold tracking-wider uppercase text-amber-400">
+                  <p className={`text-[11px] font-extrabold tracking-wider uppercase ${isDark ? "text-gray-300" : "text-slate-900"}`}>
                     Sisa Anggaran
                   </p>
-                  <h2 className="text-2xl font-black mt-2 tracking-tight text-amber-500">
+                  <h2 className={`text-2xl font-black mt-1 tracking-tight ${isDark ? "text-white" : "text-black"}`}>
                     Rp 14.53 M
                   </h2>
                 </div>
-                <div className="mt-4 pt-3 border-t border-slate-800/40 flex items-center justify-between text-xs">
-                  <span className="text-gray-400 font-medium">Belum terserap</span>
-                  <span className="text-amber-400 text-[11px] font-semibold">31.7% Sisa</span>
+                <div className={`pt-2.5 border-t flex items-center justify-between text-xs ${isDark ? "border-slate-800" : "border-slate-200"}`}>
+                  <span className={`font-bold ${isDark ? "text-gray-300" : "text-black"}`}>Belum terserap</span>
+                  <span className="px-2 py-0.5 rounded bg-red-600/10 text-red-600 dark:text-red-400 text-[11px] font-extrabold border border-red-500/20">31.7% Sisa</span>
                 </div>
               </CardContent>
             </Card>
 
             {/* Card 4: PERSENTASE REALISASI */}
-            <Card className={`relative overflow-hidden transition-all ${
-              isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-            }`}>
-              <div className="absolute top-0 left-0 w-1.5 h-full bg-emerald-500"></div>
-              <CardContent className="p-5 pl-6 flex flex-col justify-between h-full">
+            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
+              }`}>
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
+              <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
-                  <p className="text-[11px] font-bold tracking-wider uppercase text-emerald-400">
+                  <p className="text-[11px] font-extrabold tracking-wider uppercase text-red-600 dark:text-red-400">
                     Persentase Realisasi
                   </p>
-                  <div className="flex items-baseline justify-between mt-2">
-                    <h2 className="text-2xl font-black tracking-tight text-emerald-400">
+                  <div className="flex items-baseline justify-between mt-1">
+                    <h2 className="text-2xl font-black tracking-tight text-red-600 dark:text-red-500">
                       68.3%
                     </h2>
-                    <span className="text-[11px] text-gray-400 font-medium">Target: 75%</span>
+                    <span className={`text-[11px] font-bold ${isDark ? "text-gray-300" : "text-black"}`}>Target: 75%</span>
                   </div>
                 </div>
-                <div className="mt-3">
-                  <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                    <div className="bg-emerald-500 h-full rounded-full" style={{ width: "68.3%" }}></div>
+                <div className="pt-2">
+                  <div className="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                    <div className="bg-red-600 h-full rounded-full" style={{ width: "68.3%" }}></div>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Main Content Grid: Chart + Serapan Subbagian */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Tren Realisasi Bulanan (2 Cols) */}
-            <Card className={`lg:col-span-2 ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
-              <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-800/40">
-                <div>
-                  <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
-                    Tren Realisasi Bulanan
-                  </CardTitle>
-                  <p className={`text-xs mt-1 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
-                    Bar = Realisasi • Line = Target Pagu / Bulan
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="relative">
-                    <select className={`appearance-none text-xs font-semibold px-3 py-1.5 pr-7 rounded-lg border ${
-                      isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
-                    }`}>
-                      <option>TA 2025</option>
-                    </select>
-                    <ChevronDown className="w-3 h-3 absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-6">
-                {/* Custom Dual Bar/Line Visual Canvas */}
-                <div className="h-64 w-full flex items-end justify-between gap-2 pt-6 pb-2 px-2 border-b border-slate-800/60 relative">
-                  {/* Line Overlay for Target (3.8M target line) */}
-                  <div className="absolute left-0 right-0 top-[38%] border-b-2 border-dashed border-amber-400/80 z-10 flex items-center justify-end pr-2">
-                    <span className="bg-amber-500/20 text-amber-300 text-[9px] font-bold px-1.5 py-0.5 rounded border border-amber-500/40">
-                      Target Target Pagu / Bulan (Rp 3.8M)
-                    </span>
-                  </div>
-
-                  {MONTHLY_TREND_DATA.map((item, idx) => {
-                    const maxScale = 5.0
-                    const heightPct = (item.realisasi / maxScale) * 100
-
-                    return (
-                      <div key={idx} className="flex-1 flex flex-col items-center gap-2 h-full justify-end group z-20">
-                        <div className="w-full flex justify-center items-end h-full">
-                          <div
-                            style={{ height: `${heightPct}%` }}
-                            className={`w-full max-w-[28px] rounded-t transition-all duration-300 relative ${
-                              item.realisasi > 0
-                                ? "bg-gradient-to-t from-red-700 to-red-500 group-hover:brightness-125"
-                                : "bg-slate-800/40"
-                            }`}
-                          >
-                            {item.realisasi > 0 && (
-                              <span className="opacity-0 group-hover:opacity-100 absolute -top-7 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] py-0.5 px-1.5 rounded border border-gray-700 font-mono font-bold whitespace-nowrap z-30 pointer-events-none">
-                                Rp {item.realisasi}M
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        <span className={`text-[11px] font-medium ${isDark ? "text-gray-400" : "text-slate-500"}`}>{item.month}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-
-                {/* Legend */}
-                <div className="flex items-center justify-center gap-6 mt-4 text-xs font-medium">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded bg-red-600 inline-block"></span>
-                    <span className={isDark ? "text-gray-300" : "text-slate-600"}>Realisasi</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-4 h-0.5 border-b-2 border-dashed border-amber-400 inline-block"></span>
-                    <span className={isDark ? "text-gray-300" : "text-slate-600"}>Target Pagu/Bulan</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Serapan per Subbagian (1 Col) */}
+          {/* Section: Serapan per Subbagian & Top Akun Realisasi */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Serapan per Subbagian */}
             <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
-              <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-800/40">
-                  <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
+              <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <PieChart className="w-4 h-4 text-red-600" />
+                  <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-black"}`}>
                     Serapan per Subbagian
-                </CardTitle>
-                <span className="text-xs font-extrabold text-red-500 bg-red-500/10 px-2 py-0.5 rounded border border-red-500/20">
+                  </CardTitle>
+                </div>
+                <span className="text-xs font-black text-white bg-red-600 px-2.5 py-1 rounded-md shadow-xs">
                   Rata-rata: 69%
                 </span>
               </CardHeader>
@@ -476,89 +391,50 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                 {SERAPAN_SUBBAGIAN_DATA.map((row, i) => (
                   <div key={i} className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
-                      <span className={`font-semibold ${isDark ? "text-gray-200" : "text-slate-800"}`}>{row.nama}</span>
-                      <span className="font-extrabold text-red-400">{row.pct}%</span>
+                      <span className={`font-bold ${isDark ? "text-white" : "text-black"}`}>{row.nama}</span>
+                      <span className="font-black text-red-600 dark:text-red-400">{row.pct}%</span>
                     </div>
-                    <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div className="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
                       <div className={`h-full rounded-full ${row.color}`} style={{ width: `${row.pct}%` }}></div>
                     </div>
-                    <div className="flex justify-end text-[10px] text-gray-400 font-mono">
+                    <div className={`flex justify-end text-[11px] font-mono font-bold ${isDark ? "text-gray-300" : "text-slate-800"}`}>
                       <span>Rp {row.realisasi} M / Rp {row.pagu} M</span>
                     </div>
                   </div>
                 ))}
               </CardContent>
             </Card>
-          </div>
 
-          {/* Bottom Grid: Realisasi Terbaru + Top Akun Realisasi */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Realisasi Terbaru Table (2 Cols) */}
-            <Card className={`lg:col-span-2 ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
-              <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-800/40">
-                <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
-                  Realisasi Terbaru
-                </CardTitle>
-                <button
-                  onClick={() => {}}
-                  className="text-xs font-semibold text-red-500 hover:text-red-400 flex items-center gap-1 cursor-pointer transition-colors"
-                >
-                  <span>Lihat Semua</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </button>
-              </CardHeader>
-              <CardContent className="p-0">
-                <Table>
-                  <TableHeader>
-                    <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-50"}>
-                      <TableHead className="text-[11px] font-bold">NO. SK / DOKUMEN</TableHead>
-                      <TableHead className="text-[11px] font-bold">AKUN ANGGARAN</TableHead>
-                      <TableHead className="text-[11px] font-bold">SUBBAGIAN</TableHead>
-                      <TableHead className="text-[11px] font-bold text-right">JUMLAH REALISASI</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {transaksiList.map((t) => (
-                      <TableRow key={t.id} className={isDark ? "border-b border-[#1e293b]/40 hover:bg-[#131d30]" : "border-b border-slate-100 hover:bg-slate-50"}>
-                        <TableCell className="font-mono text-xs font-bold text-red-500 whitespace-nowrap">{t.noDokumen}</TableCell>
-                        <TableCell className="text-xs">
-                          <span className="font-mono font-bold block">{t.kodeAkun}</span>
-                          <span className="text-[10px] text-gray-400">{t.namaAkun}</span>
-                        </TableCell>
-                        <TableCell className="text-xs text-slate-300 font-medium">{t.subbagian}</TableCell>
-                        <TableCell className="text-xs font-black text-red-500 text-right whitespace-nowrap">
-                          {formatRupiah(t.jumlah)}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-
-            {/* Top Akun Realisasi (1 Col) */}
+            {/* Top Akun Realisasi */}
             <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
-              <CardHeader className="pb-4 border-b border-slate-800/40">
-                <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
-                  Top Akun Realisasi
-                </CardTitle>
+              <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-red-600" />
+                  <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-black"}`}>
+                    Top Akun Realisasi
+                  </CardTitle>
+                </div>
+                <span className={`text-xs font-bold ${isDark ? "text-gray-300" : "text-black"}`}>
+                  TA 2025
+                </span>
               </CardHeader>
-              <CardContent className="pt-4 space-y-4">
+              <CardContent className="pt-4 space-y-3.5">
                 {TOP_AKUN_DATA.map((akun) => (
-                  <div key={akun.rank} className="flex items-start gap-3 p-2.5 rounded-xl border border-slate-800/40 bg-[#111827]/40">
-                    <div className="w-7 h-7 rounded-lg bg-red-600/20 border border-red-500/30 text-red-400 font-extrabold text-xs flex items-center justify-center shrink-0">
-                      {akun.rank}
+                  <div key={akun.rank} className={`flex items-start gap-3 p-3 rounded-xl border ${isDark ? "bg-[#111827]/60 border-[#1e293b]" : "bg-slate-50 border-slate-200"
+                    }`}>
+                    <div className="w-8 h-8 rounded-lg bg-red-600 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
+                      #{akun.rank}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="font-bold text-gray-100 truncate">{akun.nama}</span>
-                        <span className="font-mono font-bold text-emerald-400 shrink-0 ml-2">{akun.amount}</span>
+                        <span className={`font-bold truncate ${isDark ? "text-white" : "text-black"}`}>{akun.nama}</span>
+                        <span className="font-mono font-black text-red-600 dark:text-red-400 shrink-0 ml-2">{akun.amount}</span>
                       </div>
                       <div className="flex items-center gap-2 mt-2">
-                        <div className="flex-1 bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-red-500 h-full rounded-full" style={{ width: `${akun.pct}%` }}></div>
+                        <div className="flex-1 bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                          <div className="bg-red-600 h-full rounded-full" style={{ width: `${akun.pct}%` }}></div>
                         </div>
-                        <span className="text-[10px] font-mono text-gray-400">{akun.pct}%</span>
+                        <span className={`text-[10px] font-mono font-bold ${isDark ? "text-gray-300" : "text-black"}`}>{akun.pct}%</span>
                       </div>
                     </div>
                   </div>
@@ -566,6 +442,45 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
               </CardContent>
             </Card>
           </div>
+
+          {/* Realisasi Terbaru Table */}
+          <Card className={`${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
+            <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <Wallet className="w-4 h-4 text-red-600" />
+                <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-black"}`}>
+                  Daftar Transaksi Realisasi Terbaru
+                </CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>NO. SK / DOKUMEN</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>AKUN ANGGARAN</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>SUBBAGIAN</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold uppercase text-right ${isDark ? "text-white" : "text-black"}`}>JUMLAH REALISASI</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {transaksiList.map((t) => (
+                    <TableRow key={t.id} className={isDark ? "border-b border-[#1e293b]/40 hover:bg-[#131d30]" : "border-b border-slate-100 hover:bg-slate-50"}>
+                      <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400 whitespace-nowrap">{t.noDokumen}</TableCell>
+                      <TableCell className="text-xs">
+                        <span className={`font-mono font-bold block ${isDark ? "text-white" : "text-black"}`}>{t.kodeAkun}</span>
+                        <span className={`text-[11px] font-semibold ${isDark ? "text-gray-300" : "text-slate-800"}`}>{t.namaAkun}</span>
+                      </TableCell>
+                      <TableCell className={`text-xs font-bold ${isDark ? "text-gray-200" : "text-black"}`}>{t.subbagian}</TableCell>
+                      <TableCell className="text-xs font-black text-red-600 dark:text-red-500 text-right whitespace-nowrap">
+                        {formatRupiah(t.jumlah)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
         </div>
       )}
 
@@ -577,38 +492,36 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
           <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
             <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4 text-xs">
               <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-1.5 font-bold text-red-500">
+                <div className="flex items-center gap-1.5 font-bold text-red-600">
                   <Filter className="w-4 h-4" /> Filter Realisasi:
                 </div>
 
                 <div>
-                    <select
+                  <select
                     value={filterSubbagian}
                     onChange={(e) => setFilterSubbagian(e.target.value)}
-                    className={`rounded-lg px-3 py-1.5 border ${
-                      isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
-                    }`}
+                    className={`rounded-lg px-3 py-1.5 border font-bold ${isDark ? "bg-[#131b2e] border-[#1e293b] text-white" : "bg-slate-50 border-slate-300 text-black"
+                      }`}
                   >
                     <option value="Semua">Semua Subbagian</option>
                     <option value="Keuangan">Keuangan</option>
                     <option value="Teknis Penyelenggaraan Pemilu">Teknis Penyelenggaraan Pemilu</option>
-                    <option value="SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)">SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)</option>
-                    <option value="PERDATIN (Perencanaan, Data dan Informasi)">PERDATIN (Perencanaan, Data dan Informasi)</option>
+                    <option value="SDM">SDM</option>
+                    <option value="PERDATIN">PERDATIN</option>
                     <option value="Hukum">Hukum</option>
-                    <option value="UMLOG (Umum dan Logistik)">UMLOG (Umum dan Logistik)</option>
+                    <option value="UMLOG">UMLOG</option>
                   </select>
                 </div>
 
                 <div className="relative">
-                  <Search className={`w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 ${isDark ? "text-gray-400" : "text-slate-400"}`} />
+                  <Search className={`w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 ${isDark ? "text-gray-400" : "text-slate-600"}`} />
                   <input
                     type="text"
-                    placeholder="Cari Dokumen..."
+                    placeholder="Cari Dokumen atau Akun..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className={`pl-8 pr-3 py-1.5 text-xs rounded-lg border outline-none ${
-                      isDark ? "bg-[#131b2e] border-[#1e293b] text-gray-200" : "bg-slate-50 border-slate-300 text-slate-800"
-                    }`}
+                    className={`pl-8 pr-3 py-1.5 text-xs font-semibold rounded-lg border outline-none ${isDark ? "bg-[#131b2e] border-[#1e293b] text-white" : "bg-slate-50 border-slate-300 text-black placeholder-slate-500"
+                      }`}
                   />
                 </div>
               </div>
@@ -619,28 +532,28 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-50"}>
-                    <TableHead className="text-[11px]">No. Dokumen</TableHead>
-                    <TableHead className="text-[11px]">Tanggal</TableHead>
-                    <TableHead className="text-[11px]">Akun Anggaran</TableHead>
-                    <TableHead className="text-[11px]">Subbagian</TableHead>
-                    <TableHead className="text-[11px]">Usulan Kegiatan</TableHead>
-                    <TableHead className="text-[11px]">Jumlah (Rp)</TableHead>
-                    <TableHead className="text-[11px]">Status</TableHead>
+                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>No. Dokumen</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>Tanggal</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>Akun Anggaran</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>Subbagian</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>Usulan Kegiatan</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>Jumlah (Rp)</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {transaksiList.map((item) => (
-                    <TableRow key={item.id} className={isDark ? "border-b border-[#1e293b]/40 hover:bg-[#131d30]" : "border-b border-slate-100"}>
-                      <TableCell className="font-mono text-xs font-bold text-red-500">{item.noDokumen}</TableCell>
-                      <TableCell className="text-xs whitespace-nowrap">{item.tanggal}</TableCell>
+                  {filteredTransactions.map((item) => (
+                    <TableRow key={item.id} className={isDark ? "border-b border-[#1e293b]/40 hover:bg-[#131d30]" : "border-b border-slate-100 hover:bg-slate-50"}>
+                      <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400">{item.noDokumen}</TableCell>
+                      <TableCell className={`text-xs font-semibold whitespace-nowrap ${isDark ? "text-gray-300" : "text-black"}`}>{item.tanggal}</TableCell>
                       <TableCell className="text-xs">
-                        <span className="font-mono font-bold block">{item.kodeAkun}</span>
-                        <span className="text-[10px] text-gray-400">{item.namaAkun}</span>
+                        <span className={`font-mono font-bold block ${isDark ? "text-white" : "text-black"}`}>{item.kodeAkun}</span>
+                        <span className={`text-[11px] font-semibold ${isDark ? "text-gray-300" : "text-slate-800"}`}>{item.namaAkun}</span>
                       </TableCell>
-                      <TableCell className="text-xs text-slate-400">{item.subbagian}</TableCell>
-                      <TableCell className="font-medium text-xs truncate max-w-xs">{item.usulanKegiatan}</TableCell>
-                      <TableCell className="text-xs font-extrabold text-red-500">{formatRupiah(item.jumlah)}</TableCell>
+                      <TableCell className={`text-xs font-bold ${isDark ? "text-gray-200" : "text-black"}`}>{item.subbagian}</TableCell>
+                      <TableCell className={`font-bold text-xs truncate max-w-xs ${isDark ? "text-white" : "text-black"}`}>{item.usulanKegiatan}</TableCell>
+                      <TableCell className="text-xs font-black text-red-600 dark:text-red-500 whitespace-nowrap">{formatRupiah(item.jumlah)}</TableCell>
                       <TableCell>
                         <Badge variant={item.status === "Disetujui" ? "terkirim" : "diproses"}>
                           {item.status}
@@ -661,42 +574,42 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
       {subTab === "laporan" && (
         <div className="space-y-6">
           <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
-            <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-800/40">
+            <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
               <div>
-                <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
+                <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-black"}`}>
                   Laporan Rekapitulasi Realisasi Anggaran
                 </CardTitle>
-                <p className={`text-xs ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+                <p className={`text-xs mt-1 font-medium ${isDark ? "text-gray-300" : "text-slate-700"}`}>
                   Laporan resmi penyerapan anggaran per subbagian dan program kerja TA 2025
                 </p>
               </div>
               <button
                 onClick={() => setIsLaporanOpen(true)}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs rounded-xl shadow-md flex items-center gap-2 cursor-pointer transition-all"
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md shadow-red-600/20 flex items-center gap-2 cursor-pointer transition-all"
               >
                 <FileSpreadsheet className="w-4 h-4" />
                 <span>Unduh Laporan (.csv / .xlsx)</span>
               </button>
             </CardHeader>
-            <CardContent className="pt-6">
+            <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-50"}>
-                    <TableHead className="text-[11px]">KODE AKUN</TableHead>
-                    <TableHead className="text-[11px]">NAMA AKUN</TableHead>
-                    <TableHead className="text-[11px]">PAGU (RP)</TableHead>
-                    <TableHead className="text-[11px]">REALISASI (RP)</TableHead>
-                    <TableHead className="text-[11px]">SISA (RP)</TableHead>
+                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>KODE AKUN</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>NAMA AKUN</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>PAGU (RP)</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>REALISASI (RP)</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>SISA (RP)</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {akunList.map((a) => (
-                    <TableRow key={a.kode} className={isDark ? "border-b border-[#1e293b]" : "border-b border-slate-100"}>
-                      <TableCell className="font-mono text-xs font-bold text-red-500">{a.kode}</TableCell>
-                      <TableCell className="text-xs font-medium">{a.nama}</TableCell>
-                      <TableCell className="text-xs font-bold">{formatRupiah(a.pagu)}</TableCell>
-                      <TableCell className="text-xs font-bold text-red-500">{formatRupiah(a.realisasi)}</TableCell>
-                      <TableCell className="text-xs font-bold text-amber-500">{formatRupiah(a.sisa)}</TableCell>
+                    <TableRow key={a.kode} className={isDark ? "border-b border-[#1e293b]" : "border-b border-slate-100 hover:bg-slate-50"}>
+                      <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400">{a.kode}</TableCell>
+                      <TableCell className={`text-xs font-bold ${isDark ? "text-white" : "text-black"}`}>{a.nama}</TableCell>
+                      <TableCell className={`text-xs font-bold ${isDark ? "text-gray-200" : "text-black"}`}>{formatRupiah(a.pagu)}</TableCell>
+                      <TableCell className="text-xs font-black text-red-600 dark:text-red-500">{formatRupiah(a.realisasi)}</TableCell>
+                      <TableCell className={`text-xs font-bold ${isDark ? "text-gray-300" : "text-slate-800"}`}>{formatRupiah(a.sisa)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -712,33 +625,33 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
       {subTab === "verifikasi" && (
         <div className="space-y-6">
           <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
-            <CardHeader className="pb-4 border-b border-slate-800/40">
-              <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
+            <CardHeader className="pb-4 border-b border-slate-200 dark:border-slate-800">
+              <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-black"}`}>
                 Verifikasi Dokumen Realisasi Keuangan
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-50"}>
-                    <TableHead className="text-[11px]">NO. DOKUMEN</TableHead>
-                    <TableHead className="text-[11px]">USULAN & SUBBAGIAN</TableHead>
-                    <TableHead className="text-[11px]">JUMLAH REALISASI</TableHead>
-                    <TableHead className="text-[11px]">BUKTI</TableHead>
-                    <TableHead className="text-[11px]">STATUS</TableHead>
+                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>NO. DOKUMEN</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>USULAN & SUBBAGIAN</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>JUMLAH REALISASI</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>BUKTI</TableHead>
+                    <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>STATUS</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {transaksiList.map((t) => (
-                    <TableRow key={t.id} className={isDark ? "border-b border-[#1e293b]" : "border-b border-slate-100"}>
-                      <TableCell className="font-mono text-xs font-bold text-red-500">{t.noDokumen}</TableCell>
+                    <TableRow key={t.id} className={isDark ? "border-b border-[#1e293b]" : "border-b border-slate-100 hover:bg-slate-50"}>
+                      <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400">{t.noDokumen}</TableCell>
                       <TableCell className="text-xs">
-                        <p className="font-bold">{t.usulanKegiatan}</p>
-                        <p className="text-[10px] text-gray-400">{t.subbagian}</p>
+                        <p className={`font-bold ${isDark ? "text-white" : "text-black"}`}>{t.usulanKegiatan}</p>
+                        <p className={`text-[11px] font-semibold ${isDark ? "text-gray-300" : "text-slate-700"}`}>{t.subbagian}</p>
                       </TableCell>
-                      <TableCell className="text-xs font-bold text-red-500">{formatRupiah(t.jumlah)}</TableCell>
-                      <TableCell className="text-xs text-blue-400 font-mono flex items-center gap-1">
-                        <FileText className="w-3.5 h-3.5" /> {t.buktiFile}
+                      <TableCell className="text-xs font-black text-red-600 dark:text-red-500">{formatRupiah(t.jumlah)}</TableCell>
+                      <TableCell className={`text-xs font-mono font-bold flex items-center gap-1 ${isDark ? "text-white" : "text-black"}`}>
+                        <FileText className="w-3.5 h-3.5 text-red-600" /> {t.buktiFile}
                       </TableCell>
                       <TableCell>
                         <Badge variant={t.status === "Disetujui" ? "terkirim" : "warning"}>{t.status}</Badge>

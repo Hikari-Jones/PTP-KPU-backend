@@ -45,19 +45,18 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
     <div className="space-y-6">
       {/* Visual Workflow Steps (Alur Surat Masuk) */}
       <div className={`p-4 rounded-2xl border ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
-        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-400 mb-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-red-600 dark:text-red-400 mb-3">
           Alur Pemrosesan Surat Masuk & Disposisi
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {/* Step 1 */}
           <div
-            className={`p-3 rounded-xl border flex items-start gap-3 ${
-              surat.status === "registrasi" || surat.status === "menunggu_disposisi" || surat.status === "dalam_proses" || surat.status === "selesai_disposisi"
-                ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
+            className={`p-3 rounded-xl border flex items-start gap-3 ${surat.status === "registrasi" || surat.status === "menunggu_disposisi" || surat.status === "dalam_proses" || surat.status === "selesai_disposisi"
+                ? "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400"
                 : "opacity-50 border-gray-700"
-            }`}
+              }`}
           >
-            <div className="p-2 rounded-lg bg-blue-500/20 font-bold text-xs shrink-0">1</div>
+            <div className="p-2 rounded-lg bg-red-500/20 font-bold text-xs shrink-0">1</div>
             <div>
               <p className="text-xs font-bold">1. Registrasi Surat Masuk</p>
               <p className="text-[10px] opacity-80">Nomor & file PDF terdaftar</p>
@@ -66,13 +65,12 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
 
           {/* Step 2 */}
           <div
-            className={`p-3 rounded-xl border flex items-start gap-3 ${
-              surat.disposisi
+            className={`p-3 rounded-xl border flex items-start gap-3 ${surat.disposisi
                 ? "bg-amber-500/10 border-amber-500/30 text-amber-400"
                 : isDark
-                ? "bg-[#131d30] border-[#1e293b] text-gray-400"
-                : "bg-slate-50 border-slate-200 text-slate-500"
-            }`}
+                  ? "bg-[#131d30] border-[#1e293b] text-gray-400"
+                  : "bg-slate-50 border-slate-200 text-slate-500"
+              }`}
           >
             <div className="p-2 rounded-lg bg-amber-500/20 font-bold text-xs shrink-0">2</div>
             <div>
@@ -85,15 +83,14 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
 
           {/* Step 3 */}
           <div
-            className={`p-3 rounded-xl border flex items-start gap-3 ${
-              surat.status === "selesai_disposisi"
+            className={`p-3 rounded-xl border flex items-start gap-3 ${surat.status === "selesai_disposisi"
                 ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
                 : surat.status === "dalam_proses"
-                ? "bg-blue-500/10 border-blue-500/30 text-blue-400 animate-pulse"
-                : isDark
-                ? "bg-[#131d30] border-[#1e293b] text-gray-400"
-                : "bg-slate-50 border-slate-200 text-slate-500"
-            }`}
+                  ? "bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400 animate-pulse"
+                  : isDark
+                    ? "bg-[#131d30] border-[#1e293b] text-gray-400"
+                    : "bg-slate-50 border-slate-200 text-slate-500"
+              }`}
           >
             <div className="p-2 rounded-lg bg-emerald-500/20 font-bold text-xs shrink-0">3</div>
             <div>
@@ -110,7 +107,7 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
       <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
         <div className={`p-4 border-b flex items-center justify-between ${isDark ? "border-[#1e293b]" : "border-slate-200"}`}>
           <div className="flex items-center gap-2">
-            <UserCheck className="w-5 h-5 text-amber-500" />
+            <UserCheck className="w-5 h-5 text-red-500" />
             <h3 className="text-sm font-bold">Form Perekaman Disposisi (Ketua / Sekretaris KPU)</h3>
           </div>
           {surat.disposisi && <Badge variant="success">Sudah Didisposisikan</Badge>}
@@ -127,9 +124,8 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
                 <select
                   value={tujuanUnit}
                   onChange={(e) => setTujuanUnit(e.target.value)}
-                  className={`w-full px-3 py-2 text-xs rounded-xl border outline-none cursor-pointer ${
-                    isDark ? "bg-[#131d30] border-[#1e293b] text-white focus:border-amber-500" : "bg-slate-50 border-slate-200 focus:border-amber-500"
-                  }`}
+                  className={`w-full px-3 py-2 text-xs rounded-xl border outline-none cursor-pointer ${isDark ? "bg-[#131d30] border-[#1e293b] text-white focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
+                    }`}
                 >
                   <option value="PERDATIN (Perencanaan, Data dan Informasi)">PERDATIN (Perencanaan, Data dan Informasi)</option>
                   <option value="UMLOG (Umum dan Logistik)">UMLOG (Umum dan Logistik)</option>
@@ -147,9 +143,8 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
                   type="date"
                   value={tenggatWaktu}
                   onChange={(e) => setTenggatWaktu(e.target.value)}
-                  className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${
-                    isDark ? "bg-[#131d30] border-[#1e293b] text-white focus:border-amber-500" : "bg-slate-50 border-slate-200 focus:border-amber-500"
-                  }`}
+                  className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${isDark ? "bg-[#131d30] border-[#1e293b] text-white focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
+                    }`}
                 />
               </div>
             </div>
@@ -167,13 +162,12 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
                     type="button"
                     key={p.id}
                     onClick={() => setPrioritas(p.id as any)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-xl border cursor-pointer transition-all ${
-                      prioritas === p.id
-                        ? "bg-amber-600 text-white border-amber-600 shadow-sm"
+                    className={`px-3 py-1.5 text-xs font-medium rounded-xl border cursor-pointer transition-all ${prioritas === p.id
+                        ? "bg-red-600 text-white border-red-600 shadow-sm"
                         : isDark
-                        ? "bg-[#131d30] border-[#1e293b] text-gray-400"
-                        : "bg-slate-100 border-slate-200 text-slate-600"
-                    }`}
+                          ? "bg-[#131d30] border-[#1e293b] text-gray-400 hover:text-white"
+                          : "bg-slate-100 border-slate-200 text-slate-600 hover:bg-slate-200"
+                      }`}
                   >
                     {p.label}
                   </button>
@@ -192,9 +186,8 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
                 placeholder="Tuliskan petunjuk penanganan, tindak lanjut, atau koordinasi yang diperlukan..."
                 value={catatan}
                 onChange={(e) => setCatatan(e.target.value)}
-                className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${
-                  isDark ? "bg-[#131d30] border-[#1e293b] text-white focus:border-amber-500" : "bg-slate-50 border-slate-200 focus:border-amber-500"
-                }`}
+                className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${isDark ? "bg-[#131d30] border-[#1e293b] text-white focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
+                  }`}
               />
             </div>
 
@@ -209,7 +202,7 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
               )}
               <button
                 type="submit"
-                className="ml-auto px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-xl shadow-md shadow-amber-600/30 flex items-center gap-1.5 cursor-pointer"
+                className="ml-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-xl shadow-md shadow-red-600/30 flex items-center gap-1.5 cursor-pointer"
               >
                 <UserCheck className="w-4 h-4" />
                 <span>Simpan Disposisi Pimpinan</span>
@@ -223,7 +216,7 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
       <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
         <div className={`p-4 border-b flex items-center justify-between ${isDark ? "border-[#1e293b]" : "border-slate-200"}`}>
           <h3 className="text-sm font-bold flex items-center gap-2">
-            <Building className="w-4 h-4 text-blue-400" />
+            <Building className="w-4 h-4 text-red-500" />
             <span>Verifikasi & Updates Status Tindak Lanjut Unit Target</span>
           </h3>
         </div>
@@ -231,7 +224,7 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
           <div className="space-y-1">
             <p className="text-xs font-medium">Ubah Status Tindak Lanjut Surat Masuk Ini:</p>
             <p className={`text-[11px] ${isDark ? "text-gray-400" : "text-slate-500"}`}>
-              Status saat ini: <strong className="text-amber-400 uppercase">{surat.status.replace("_", " ")}</strong>
+              Status saat ini: <strong className="text-red-500 uppercase">{surat.status.replace("_", " ")}</strong>
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -239,7 +232,7 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
               onClick={() =>
                 onUpdateStatus(surat.id, "dalam_proses", "Unit pelaksana memulai tindak lanjut penyusunan tanggapan.")
               }
-              className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-xl cursor-pointer transition-all"
+              className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-xl cursor-pointer transition-all"
             >
               Set Status: Dalam Proses
             </button>
@@ -247,7 +240,7 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
               onClick={() =>
                 onUpdateStatus(surat.id, "selesai_disposisi", "Instruksi disposisi pimpinan telah selesai ditindaklanjuti secara penuh.")
               }
-              className="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl cursor-pointer transition-all"
+              className="px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-950 hover:bg-slate-800 text-xs font-semibold rounded-xl cursor-pointer transition-all"
             >
               Set Status: Selesai Disposisi
             </button>

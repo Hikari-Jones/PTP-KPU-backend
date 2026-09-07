@@ -94,13 +94,13 @@ export function SuratDashboard({
   const getPrioritasBadge = (prioritas: SuratItem["prioritas"]) => {
     switch (prioritas) {
       case "sangat_penting":
-        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-red-500/10 text-red-500 border border-red-500/20">Sangat Penting</span>
+        return <span className="px-2 py-0.5 rounded text-[10px] font-black bg-red-600 text-white shadow-xs">Sangat Penting</span>
       case "penting":
-        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20">Penting</span>
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-600/15 text-red-600 dark:text-red-400 border border-red-500/30">Penting</span>
       case "rahasia":
-        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-500/10 text-purple-500 border border-purple-500/20">Rahasia</span>
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-900 text-white dark:bg-white dark:text-slate-950">Rahasia</span>
       default:
-        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-500/10 text-slate-400 border border-slate-500/20">Biasa</span>
+        return <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${isDark ? "bg-slate-800 text-gray-300" : "bg-slate-100 text-slate-800"}`}>Biasa</span>
     }
   }
 
@@ -109,24 +109,24 @@ export function SuratDashboard({
       {/* Top Banner Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-slate-900"}`}>
+          <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-black"}`}>
             Sistem Informasi Persuratan & Disposisi (PTP-KPU)
           </h1>
-          <p className={`text-xs mt-1 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+          <p className={`text-xs mt-1 font-medium ${isDark ? "text-gray-300" : "text-slate-700"}`}>
             Modul pengurusan alur registrasi surat masuk, disposisi pimpinan, draft surat keluar, TTE digital, dan arsip.
           </p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={onOpenInputSuratMasuk}
-            className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-xs rounded-xl shadow-md shadow-blue-600/20 flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
+            className="px-3.5 py-2 bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-bold text-xs rounded-xl shadow-md flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>Registrasi Surat Masuk</span>
           </button>
           <button
             onClick={onOpenBuatDraft}
-            className="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white font-medium text-xs rounded-xl shadow-md shadow-red-600/20 flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
+            className="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md shadow-red-600/20 flex items-center gap-1.5 cursor-pointer transition-all active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>Buat Draft Surat Keluar</span>
@@ -137,64 +137,64 @@ export function SuratDashboard({
       {/* 4 Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Surat Masuk */}
-        <Card className={`transition-all hover:border-blue-500/50 ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
-          <CardContent className="p-4 flex items-center justify-between">
-            <div className="space-y-1">
-              <p className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+        <Card className={`transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
+          <CardContent className="p-5 flex items-center justify-between min-h-[110px]">
+            <div className="flex-1 flex flex-col justify-center space-y-1">
+              <p className={`text-[11px] font-extrabold uppercase tracking-wider ${isDark ? "text-gray-300" : "text-slate-800"}`}>
                 Total Surat Masuk
               </p>
-              <h2 className={`text-2xl font-black ${isDark ? "text-white" : "text-slate-900"}`}>{totalSuratMasuk} Berkas</h2>
-              <span className="inline-flex items-center text-[10px] text-blue-400 font-medium">Ter-registrasi di agenda</span>
+              <h2 className={`text-2xl font-black ${isDark ? "text-white" : "text-black"}`}>{totalSuratMasuk} Berkas</h2>
+              <span className="inline-flex items-center text-[10px] text-red-600 dark:text-red-400 font-bold">Ter-registrasi di agenda</span>
             </div>
-            <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-500 border border-blue-500/20">
+            <div className="w-14 h-14 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
               <Mail className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
         {/* Surat Keluar */}
-        <Card className={`transition-all hover:border-emerald-500/50 ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
-          <CardContent className="p-4 flex items-center justify-between">
-            <div className="space-y-1">
-              <p className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? "text-gray-400" : "text-slate-500"}`}>
-                Surat Keluar & ND
+        <Card className={`transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
+          <CardContent className="p-5 flex items-center justify-between min-h-[110px]">
+            <div className="flex-1 flex flex-col justify-center space-y-1">
+              <p className={`text-[11px] font-extrabold uppercase tracking-wider ${isDark ? "text-gray-300" : "text-slate-800"}`}>
+                Surat Keluar / Nota
               </p>
-              <h2 className={`text-2xl font-black ${isDark ? "text-white" : "text-slate-900"}`}>{totalSuratKeluar} Berkas</h2>
-              <span className="inline-flex items-center text-[10px] text-emerald-400 font-medium">Konsep & Terdistribusi</span>
+              <h2 className={`text-2xl font-black ${isDark ? "text-white" : "text-black"}`}>{totalSuratKeluar} Berkas</h2>
+              <span className="inline-flex items-center text-[10px] text-red-600 dark:text-red-400 font-bold">Telah diterbitkan</span>
             </div>
-            <div className="p-3 rounded-2xl bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+            <div className="w-14 h-14 rounded-2xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-xs">
               <Send className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
         {/* Menunggu Disposisi */}
-        <Card className={`transition-all hover:border-amber-500/50 ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
-          <CardContent className="p-4 flex items-center justify-between">
-            <div className="space-y-1">
-              <p className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+        <Card className={`transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
+          <CardContent className="p-5 flex items-center justify-between min-h-[110px]">
+            <div className="flex-1 flex flex-col justify-center space-y-1">
+              <p className={`text-[11px] font-extrabold uppercase tracking-wider ${isDark ? "text-gray-300" : "text-slate-800"}`}>
                 Menunggu Disposisi
               </p>
-              <h2 className={`text-2xl font-black text-amber-500`}>{menungguDisposisi} Berkas</h2>
-              <span className="inline-flex items-center text-[10px] text-amber-400 font-medium">Memerlukan Penanganan Pimpinan</span>
+              <h2 className={`text-2xl font-black ${isDark ? "text-white" : "text-black"}`}>{menungguDisposisi} Surat</h2>
+              <span className="inline-flex items-center text-[10px] text-red-600 dark:text-red-400 font-bold">Perlu arahan pimpinan</span>
             </div>
-            <div className="p-3 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/20">
+            <div className="w-14 h-14 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 flex items-center justify-center shrink-0 shadow-xs">
               <Clock className="w-6 h-6" />
             </div>
           </CardContent>
         </Card>
 
         {/* Menunggu TTE */}
-        <Card className={`transition-all hover:border-purple-500/50 ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
-          <CardContent className="p-4 flex items-center justify-between">
-            <div className="space-y-1">
-              <p className={`text-[11px] font-semibold uppercase tracking-wider ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+        <Card className={`transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
+          <CardContent className="p-5 flex items-center justify-between min-h-[110px]">
+            <div className="flex-1 flex flex-col justify-center space-y-1">
+              <p className={`text-[11px] font-extrabold uppercase tracking-wider ${isDark ? "text-gray-300" : "text-slate-800"}`}>
                 Menunggu TTE Digital
               </p>
-              <h2 className={`text-2xl font-black text-purple-400`}>{menungguTTE} Berkas</h2>
-              <span className="inline-flex items-center text-[10px] text-purple-400 font-medium">Otorisasi Passphrase Pejabat</span>
+              <h2 className={`text-2xl font-black ${isDark ? "text-white" : "text-black"}`}>{menungguTTE} Berkas</h2>
+              <span className="inline-flex items-center text-[10px] text-red-600 dark:text-red-400 font-bold">Siap tanda tangan</span>
             </div>
-            <div className="p-3 rounded-2xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+            <div className="w-14 h-14 rounded-2xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-xs">
               <FileCheck className="w-6 h-6" />
             </div>
           </CardContent>
@@ -221,25 +221,21 @@ export function SuratDashboard({
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 ${
-                      isActive
-                        ? isDark
-                          ? "bg-red-600 text-white shadow-sm"
-                          : "bg-red-600 text-white shadow-sm"
-                        : isDark
-                        ? "text-gray-400 hover:bg-[#131d30] hover:text-white"
-                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 ${isActive
+                      ? "bg-red-600 text-white shadow-sm"
+                      : isDark
+                        ? "text-gray-300 hover:bg-[#131d30] hover:text-white"
+                        : "text-slate-800 hover:bg-slate-100 hover:text-black"
+                      }`}
                   >
                     <span>{tab.label}</span>
                     <span
-                      className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                        isActive
-                          ? "bg-white/20 text-white"
-                          : isDark
-                          ? "bg-slate-800 text-gray-400"
-                          : "bg-slate-200 text-slate-700"
-                      }`}
+                      className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${isActive
+                        ? "bg-white/20 text-white"
+                        : isDark
+                          ? "bg-slate-800 text-white"
+                          : "bg-slate-200 text-black"
+                        }`}
                     >
                       {tab.count}
                     </span>
@@ -251,26 +247,24 @@ export function SuratDashboard({
             {/* Quick Controls */}
             <div className="flex items-center gap-2">
               <div className="relative flex-1 md:w-64">
-                <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 ${isDark ? "text-gray-400" : "text-slate-400"}`} />
+                <Search className={`w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 ${isDark ? "text-gray-400" : "text-slate-600"}`} />
                 <input
                   type="text"
                   placeholder="Cari no. surat, perihal, pengirim..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className={`w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border outline-none transition-colors ${
-                    isDark
-                      ? "bg-[#131d30] border-[#1e293b] text-white focus:border-red-500"
-                      : "bg-slate-50 border-slate-200 text-slate-900 focus:border-red-500"
-                  }`}
+                  className={`w-full pl-9 pr-3 py-1.5 text-xs font-semibold rounded-xl border outline-none transition-colors ${isDark
+                    ? "bg-[#131d30] border-[#1e293b] text-white focus:border-red-500 placeholder-gray-500"
+                    : "bg-slate-50 border-slate-300 text-black focus:border-red-500 placeholder-slate-500"
+                    }`}
                 />
               </div>
 
               <select
                 value={jenisFilter}
                 onChange={(e) => setJenisFilter(e.target.value)}
-                className={`py-1.5 px-2.5 text-xs rounded-xl border outline-none cursor-pointer ${
-                  isDark ? "bg-[#131d30] border-[#1e293b] text-gray-300" : "bg-slate-50 border-slate-200 text-slate-700"
-                }`}
+                className={`py-1.5 px-2.5 text-xs font-bold rounded-xl border outline-none cursor-pointer ${isDark ? "bg-[#131d30] border-[#1e293b] text-white" : "bg-slate-50 border-slate-300 text-black"
+                  }`}
               >
                 <option value="semua">Semua Jenis</option>
                 <option value="masuk">Surat Masuk</option>
@@ -285,13 +279,13 @@ export function SuratDashboard({
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#080c14]/40" : "border-b border-slate-200 bg-slate-50"}>
-                <TableHead className="text-[11px]">Nomor Surat & Tanggal</TableHead>
-                <TableHead className="text-[11px]">Perihal & Ringkasan</TableHead>
-                <TableHead className="text-[11px]">Pengirim / Penerima</TableHead>
-                <TableHead className="text-[11px]">Prioritas</TableHead>
-                <TableHead className="text-[11px]">Status Alur</TableHead>
-                <TableHead className="text-[11px] text-right">Aksi Alur</TableHead>
+              <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#080c14]/40" : "border-b border-slate-200 bg-slate-100"}>
+                <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Nomor Surat & Tanggal</TableHead>
+                <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Perihal & Ringkasan</TableHead>
+                <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Pengirim / Penerima</TableHead>
+                <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Prioritas</TableHead>
+                <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Status Alur</TableHead>
+                <TableHead className={`text-[11px] font-extrabold uppercase text-right ${isDark ? "text-white" : "text-black"}`}>Aksi Alur</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -300,7 +294,7 @@ export function SuratDashboard({
                   <TableCell colSpan={6} className="text-center py-8">
                     <div className="flex flex-col items-center justify-center gap-2 text-gray-400">
                       <AlertCircle className="w-8 h-8 opacity-40" />
-                      <p className="text-xs">Tidak ada data persuratan yang memenuhi filter.</p>
+                      <p className="text-xs font-semibold">Tidak ada data persuratan yang memenuhi filter.</p>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -308,26 +302,22 @@ export function SuratDashboard({
                 filteredSurat.map((surat) => (
                   <TableRow
                     key={surat.id}
-                    className={`transition-colors cursor-pointer ${
-                      isDark ? "border-b border-[#1e293b]/50 hover:bg-[#131d30]/70" : "border-b border-slate-100 hover:bg-slate-50"
-                    }`}
+                    className={`transition-colors cursor-pointer ${isDark ? "border-b border-[#1e293b]/50 hover:bg-[#131d30]/70" : "border-b border-slate-100 hover:bg-slate-50"
+                      }`}
                     onClick={() => onSelectSurat(surat)}
                   >
                     {/* Nomor & Tanggal */}
                     <TableCell className="align-top py-3">
                       <div className="space-y-1">
-                        <span className="font-mono text-xs font-bold text-red-500 block">{surat.nomorSurat}</span>
+                        <span className="font-mono text-xs font-bold text-red-600 dark:text-red-400 block">{surat.nomorSurat}</span>
                         <div className="flex items-center gap-1.5">
                           <span
-                            className={`px-1.5 py-0.2 rounded text-[10px] font-semibold uppercase ${
-                              surat.jenis === "masuk"
-                                ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                                : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                            }`}
+                            className={`px-1.5 py-0.2 rounded text-[10px] font-bold uppercase ${isDark ? "bg-slate-800 text-white border border-slate-700" : "bg-slate-100 text-black border border-slate-300"
+                              }`}
                           >
                             {surat.jenis.replace("_", " ")}
                           </span>
-                          <span className={`text-[10px] ${isDark ? "text-gray-400" : "text-slate-500"}`}>{surat.tanggal}</span>
+                          <span className={`text-[10px] font-semibold ${isDark ? "text-gray-300" : "text-slate-700"}`}>{surat.tanggal}</span>
                         </div>
                       </div>
                     </TableCell>
@@ -335,16 +325,16 @@ export function SuratDashboard({
                     {/* Perihal & Ringkasan */}
                     <TableCell className="align-top py-3 max-w-xs">
                       <div>
-                        <p className={`font-semibold text-xs leading-snug ${isDark ? "text-gray-100" : "text-slate-800"}`}>
+                        <p className={`font-bold text-xs leading-snug ${isDark ? "text-white" : "text-black"}`}>
                           {surat.perihal}
                         </p>
                         {surat.ringkasanIsi && (
-                          <p className={`text-[11px] line-clamp-1 mt-0.5 ${isDark ? "text-gray-400" : "text-slate-500"}`}>
+                          <p className={`text-[11px] font-medium line-clamp-1 mt-0.5 ${isDark ? "text-gray-300" : "text-slate-700"}`}>
                             {surat.ringkasanIsi}
                           </p>
                         )}
                         {surat.fileName && (
-                          <div className="flex items-center gap-1 text-[10px] text-blue-400 mt-1">
+                          <div className="flex items-center gap-1 text-[10px] font-bold text-red-600 dark:text-red-400 mt-1">
                             <FileText className="w-3 h-3" />
                             <span>{surat.fileName}</span>
                           </div>
@@ -354,12 +344,12 @@ export function SuratDashboard({
 
                     {/* Pengirim / Penerima */}
                     <TableCell className="align-top py-3">
-                      <div className="text-xs space-y-0.5">
-                        <p className={isDark ? "text-gray-200" : "text-slate-800"}>
-                          <span className="text-[10px] text-gray-400">Dari:</span> {surat.pengirim}
+                      <div className="text-xs space-y-0.5 font-medium">
+                        <p className={isDark ? "text-white" : "text-black"}>
+                          <span className="text-[10px] font-bold text-red-600 dark:text-red-400">Dari:</span> {surat.pengirim}
                         </p>
-                        <p className={isDark ? "text-gray-400" : "text-slate-600"}>
-                          <span className="text-[10px] text-gray-400">Ke:</span> {surat.penerima}
+                        <p className={isDark ? "text-gray-300" : "text-slate-700"}>
+                          <span className="text-[10px] font-bold text-red-600 dark:text-red-400">Ke:</span> {surat.penerima}
                         </p>
                       </div>
                     </TableCell>
@@ -372,7 +362,7 @@ export function SuratDashboard({
                       <div className="space-y-1">
                         {getStatusBadge(surat.status)}
                         {surat.disposisi && (
-                          <p className="text-[10px] text-amber-400 font-mono">➡ {surat.disposisi.tujuanUnit}</p>
+                          <p className="text-[10px] text-red-600 dark:text-red-400 font-mono font-bold">➡ {surat.disposisi.tujuanUnit}</p>
                         )}
                       </div>
                     </TableCell>
@@ -381,11 +371,10 @@ export function SuratDashboard({
                     <TableCell className="align-top py-3 text-right" onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => onSelectSurat(surat)}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors inline-flex items-center gap-1 cursor-pointer ${
-                          isDark
-                            ? "bg-slate-800 text-gray-200 hover:bg-red-600 hover:text-white"
-                            : "bg-slate-100 text-slate-700 hover:bg-red-600 hover:text-white"
-                        }`}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all inline-flex items-center gap-1 cursor-pointer active:scale-95 ${isDark
+                          ? "bg-slate-800 text-white hover:bg-red-600 border border-slate-700"
+                          : "bg-slate-100 text-black hover:bg-red-600 hover:text-white border border-slate-300"
+                          }`}
                       >
                         <Eye className="w-3.5 h-3.5" />
                         <span>Detail & Alur</span>

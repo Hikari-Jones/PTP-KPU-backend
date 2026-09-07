@@ -77,9 +77,8 @@ export function BuatDraftSuratModal({ theme, isOpen, onClose, onSubmit }: BuatDr
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className={`relative w-full max-w-2xl rounded-2xl shadow-2xl border overflow-hidden ${
-          isDark ? "bg-[#0d1322] border-[#1e293b] text-white" : "bg-white border-slate-200 text-slate-900"
-        }`}
+        className={`relative w-full max-w-2xl rounded-2xl shadow-2xl border overflow-hidden ${isDark ? "bg-[#0d1322] border-[#1e293b] text-white" : "bg-white border-slate-200 text-slate-900"
+          }`}
       >
         {/* Header */}
         <div className={`p-4 border-b flex items-center justify-between ${isDark ? "border-[#1e293b] bg-[#131d30]" : "border-slate-200 bg-slate-50"}`}>
@@ -96,9 +95,8 @@ export function BuatDraftSuratModal({ theme, isOpen, onClose, onSubmit }: BuatDr
           </div>
           <button
             onClick={onClose}
-            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-              isDark ? "hover:bg-slate-800 text-gray-400 hover:text-white" : "hover:bg-slate-200 text-slate-500"
-            }`}
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${isDark ? "hover:bg-slate-800 text-gray-400 hover:text-white" : "hover:bg-slate-200 text-slate-500"
+              }`}
           >
             <X className="w-5 h-5" />
           </button>
@@ -109,28 +107,34 @@ export function BuatDraftSuratModal({ theme, isOpen, onClose, onSubmit }: BuatDr
           {/* Quick Template Picker */}
           <div className={`p-3 rounded-xl border ${isDark ? "bg-[#131d30]/60 border-[#1e293b]" : "bg-slate-50 border-slate-200"}`}>
             <div className="flex items-center gap-1.5 mb-2">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <Sparkles className="w-3.5 h-3.5 text-red-500" />
               <span className="text-xs font-semibold">Gunakan Template Cepat:</span>
             </div>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => handleTemplateSelect("edaran")}
-                className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 cursor-pointer"
+                className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 hover:bg-red-500/20 cursor-pointer transition-colors"
               >
                 Template Surat Edaran
               </button>
               <button
                 type="button"
                 onClick={() => handleTemplateSelect("undangan")}
-                className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-purple-500/10 text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 cursor-pointer"
+                className={`px-2.5 py-1 text-[11px] font-medium rounded-lg border transition-colors cursor-pointer ${isDark
+                    ? "bg-slate-800 text-gray-300 border-slate-700 hover:bg-slate-700"
+                    : "bg-slate-200 text-slate-700 border-slate-300 hover:bg-slate-300"
+                  }`}
               >
                 Template Undangan Rapat
               </button>
               <button
                 type="button"
                 onClick={() => handleTemplateSelect("nota")}
-                className="px-2.5 py-1 text-[11px] font-medium rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 cursor-pointer"
+                className={`px-2.5 py-1 text-[11px] font-medium rounded-lg border transition-colors cursor-pointer ${isDark
+                    ? "bg-slate-800 text-gray-300 border-slate-700 hover:bg-slate-700"
+                    : "bg-slate-200 text-slate-700 border-slate-300 hover:bg-slate-300"
+                  }`}
               >
                 Template Nota Dinas Internal
               </button>
@@ -144,9 +148,8 @@ export function BuatDraftSuratModal({ theme, isOpen, onClose, onSubmit }: BuatDr
               <select
                 value={formData.kategoriSurat}
                 onChange={(e) => setFormData({ ...formData, kategoriSurat: e.target.value })}
-                className={`w-full px-3 py-2 text-xs rounded-xl border outline-none cursor-pointer ${
-                  isDark ? "bg-[#131d30] border-[#1e293b] focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
-                }`}
+                className={`w-full px-3 py-2 text-xs rounded-xl border outline-none cursor-pointer ${isDark ? "bg-[#131d30] border-[#1e293b] focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
+                  }`}
               >
                 <option value="Surat Biasa / Dinas">Surat Biasa / Dinas</option>
                 <option value="Surat Edaran">Surat Edaran</option>
@@ -167,9 +170,8 @@ export function BuatDraftSuratModal({ theme, isOpen, onClose, onSubmit }: BuatDr
                 placeholder="Contoh: KPU Kabupaten Minahasa / Instansi Terkait"
                 value={formData.penerima}
                 onChange={(e) => setFormData({ ...formData, penerima: e.target.value, tujuan: e.target.value })}
-                className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${
-                  isDark ? "bg-[#131d30] border-[#1e293b] focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
-                }`}
+                className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${isDark ? "bg-[#131d30] border-[#1e293b] focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
+                  }`}
               />
             </div>
           </div>
@@ -185,9 +187,8 @@ export function BuatDraftSuratModal({ theme, isOpen, onClose, onSubmit }: BuatDr
               placeholder="Contoh: Permohonan Klarifikasi Data Anggaran Triwulan III"
               value={formData.perihal}
               onChange={(e) => setFormData({ ...formData, perihal: e.target.value })}
-              className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${
-                isDark ? "bg-[#131d30] border-[#1e293b] focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
-              }`}
+              className={`w-full px-3 py-2 text-xs rounded-xl border outline-none ${isDark ? "bg-[#131d30] border-[#1e293b] focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
+                }`}
             />
           </div>
 
@@ -199,9 +200,8 @@ export function BuatDraftSuratModal({ theme, isOpen, onClose, onSubmit }: BuatDr
               placeholder="Tuliskan pokok-pokok narasi draft surat di sini..."
               value={formData.isiSurat}
               onChange={(e) => setFormData({ ...formData, isiSurat: e.target.value })}
-              className={`w-full px-3 py-2 text-xs rounded-xl border outline-none font-sans ${
-                isDark ? "bg-[#131d30] border-[#1e293b] focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
-              }`}
+              className={`w-full px-3 py-2 text-xs rounded-xl border outline-none font-sans ${isDark ? "bg-[#131d30] border-[#1e293b] focus:border-red-500" : "bg-slate-50 border-slate-200 focus:border-red-500"
+                }`}
             />
           </div>
 
@@ -223,9 +223,8 @@ export function BuatDraftSuratModal({ theme, isOpen, onClose, onSubmit }: BuatDr
             <button
               type="button"
               onClick={onClose}
-              className={`px-4 py-2 text-xs rounded-xl font-semibold transition-colors cursor-pointer ${
-                isDark ? "bg-slate-800 text-gray-300 hover:bg-slate-700" : "bg-slate-200 text-slate-700 hover:bg-slate-300"
-              }`}
+              className={`px-4 py-2 text-xs rounded-xl font-semibold transition-colors cursor-pointer ${isDark ? "bg-slate-800 text-gray-300 hover:bg-slate-700" : "bg-slate-200 text-slate-700 hover:bg-slate-300"
+                }`}
             >
               Batal
             </button>
