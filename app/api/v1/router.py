@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import bagian, pegawai
+from app.api.v1.endpoints import bagian, pegawai, arsip
 
 api_router = APIRouter()
 
@@ -9,3 +9,5 @@ async def status():
 
 api_router.include_router(bagian.router, prefix="/bagian", tags=["Bagian"])
 api_router.include_router(pegawai.router, prefix="/pegawai", tags=["Pegawai"])
+api_router.include_router(arsip.router, prefix="/arsip", tags=["Arsip"])
+
