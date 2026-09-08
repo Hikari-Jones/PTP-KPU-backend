@@ -14,7 +14,8 @@ import {
   Users,
   Bug,
   Database,
-  LayoutGrid
+  LayoutGrid,
+  Archive
 } from "lucide-react"
 import { useAuth } from "../../context/AuthContext"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
@@ -65,10 +66,11 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
   ]
 
   const suratSubmenus = [
-    { id: "surat-summary", label: "Ringkasan" },
-    { id: "surat-masuk", label: "Surat Masuk" },
+    { id: "surat-summary", label: "Dashboard" },
     { id: "surat-keluar", label: "Surat Keluar" },
-    { id: "surat-arsip", label: "Arsip" },
+    { id: "surat-tugas", label: "Surat Tugas" },
+    { id: "surat-klasifikasi", label: "Kode Klasifikasi" },
+    { id: "surat-simulator", label: "Simulator Concurrency" },
   ]
 
   const adminMenu = [
@@ -110,7 +112,7 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
     <aside
       className={`relative flex flex-col justify-between h-screen transition-all duration-300 z-20 shrink-0 ${collapsed ? "w-20" : "w-64"
         } ${isDark
-          ? "bg-[#070b14] border-r border-[#1e293b]/60 text-gray-200"
+          ? "bg-[#0f172a]/95 border-r border-white/10 text-gray-200 backdrop-blur-md"
           : "bg-white border-r border-slate-200 text-slate-700 shadow-sm"
         }`}
     >
@@ -277,6 +279,22 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
                   </div>
                 )}
               </div>
+
+              {/* Arsip Data */}
+              <button
+                onClick={() => onSelectMenu("arsip")}
+                title={collapsed ? "Arsip Data" : undefined}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
+                  activeMenu === "arsip"
+                    ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
+                    : isDark
+                    ? "text-gray-400 hover:text-gray-100 hover:bg-[#131b2e]"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                } ${collapsed ? "justify-center px-0" : ""}`}
+              >
+                <Archive className="w-4 h-4 shrink-0" />
+                {!collapsed && <span className="truncate">Arsip Data</span>}
+              </button>
 
               {/* Pengaturan */}
               <button

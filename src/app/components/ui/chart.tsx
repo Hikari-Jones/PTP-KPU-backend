@@ -14,8 +14,7 @@ export function DashboardChart({ theme = "light" }: { theme?: "light" | "dark" }
   const isDark = theme === "dark"
 
   return (
-    <Card className={`transition-colors duration-200 ${isDark ? "bg-[#0d1322]/80 border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-      }`}>
+    <Card className={`transition-all duration-200 ${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <div>
           <CardTitle className={`text-base font-bold ${isDark ? "text-white" : "text-slate-900"}`}>

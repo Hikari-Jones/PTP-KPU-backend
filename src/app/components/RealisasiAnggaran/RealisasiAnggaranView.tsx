@@ -197,8 +197,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
         <div className="space-y-6">
           {/* Top Filter Area */}
           <div
-            className={`p-4 rounded-2xl border flex flex-wrap items-center justify-between gap-4 ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-              }`}
+            className={`p-4 rounded-2xl border flex flex-wrap items-center justify-between gap-4 ${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg`}
           >
             <div className="flex flex-wrap items-center gap-3">
               {/* TA Dropdown */}
@@ -283,8 +282,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
           {/* 4 KPI Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Card 1: TOTAL PAGU ANGGARAN */}
-            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-              }`}>
+            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
               <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-900 dark:bg-slate-400"></div>
               <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
@@ -305,8 +303,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             </Card>
 
             {/* Card 2: TOTAL REALISASI */}
-            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-              }`}>
+            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
               <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
               <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
@@ -328,8 +325,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             </Card>
 
             {/* Card 3: SISA ANGGARAN */}
-            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-              }`}>
+            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
               <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-900 dark:bg-slate-400"></div>
               <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
@@ -348,8 +344,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             </Card>
 
             {/* Card 4: PERSENTASE REALISASI */}
-            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
-              }`}>
+            <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
               <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
               <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
@@ -375,7 +370,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
           {/* Section: Serapan per Subbagian & Top Akun Realisasi */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Serapan per Subbagian */}
-            <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
+            <Card className={`${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
               <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-2">
                   <PieChart className="w-4 h-4 text-red-600" />
@@ -406,7 +401,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             </Card>
 
             {/* Top Akun Realisasi */}
-            <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
+            <Card className={`${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
               <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-2">
                   <Layers className="w-4 h-4 text-red-600" />
@@ -444,7 +439,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
           </div>
 
           {/* Realisasi Terbaru Table */}
-          <Card className={`${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
+          <Card className={`${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
             <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2">
                 <Wallet className="w-4 h-4 text-red-600" />
@@ -489,7 +484,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
       {/* ========================================================================= */}
       {subTab === "transaksi" && (
         <div className="space-y-6">
-          <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
+          <Card className={`${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
             <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4 text-xs">
               <div className="flex flex-wrap items-center gap-3">
                 <div className="flex items-center gap-1.5 font-bold text-red-600">
@@ -528,7 +523,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             </CardContent>
           </Card>
 
-          <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
+          <Card className={`${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
@@ -573,7 +568,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
       {/* ========================================================================= */}
       {subTab === "laporan" && (
         <div className="space-y-6">
-          <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
+          <Card className={`${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
             <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
               <div>
                 <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-black"}`}>
@@ -624,7 +619,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
       {/* ========================================================================= */}
       {subTab === "verifikasi" && (
         <div className="space-y-6">
-          <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
+          <Card className={`${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
             <CardHeader className="pb-4 border-b border-slate-200 dark:border-slate-800">
               <CardTitle className={`text-base font-bold my-0 ${isDark ? "text-white" : "text-black"}`}>
                 Verifikasi Dokumen Realisasi Keuangan

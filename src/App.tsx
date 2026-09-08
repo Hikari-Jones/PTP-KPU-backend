@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { AuthProvider, useAuth } from "./app/context/AuthContext"
 import { LoginForm } from "./app/components/auth/LoginForm"
 import { Header } from "./app/components/layout/Header"
@@ -29,6 +29,17 @@ function MainLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [activeMenu, setActiveMenu] = useState("dashboard")
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme)
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark")
+      document.documentElement.classList.remove("light")
+    } else {
+      document.documentElement.classList.add("light")
+      document.documentElement.classList.remove("dark")
+    }
+  }, [theme])
+
   const toggleTheme = (newTheme?: "light" | "dark") => {
     const next = newTheme || (theme === "light" ? "dark" : "light")
     setTheme(next)
@@ -56,12 +67,16 @@ function MainLayout() {
         return <RealisasiAnggaranView theme={theme} subTab="verifikasi" />
       case "surat":
       case "surat-summary":
-        return <SuratView theme={theme} subTab="ringkasan" />
-      case "surat-masuk":
-        return <SuratView theme={theme} subTab="masuk" />
+        return <SuratView theme={theme} subTab="dashboard" />
       case "surat-keluar":
-        return <SuratView theme={theme} subTab="keluar" />
-      case "surat-arsip":
+        return <SuratView theme={theme} subTab="surat-keluar" />
+      case "surat-tugas":
+      case "surat-masuk":
+        return <SuratView theme={theme} subTab="surat-tugas" />
+      case "surat-klasifikasi":
+        return <SuratView theme={theme} subTab="klasifikasi" />
+      case "surat-simulator":
+        return <SuratView theme={theme} subTab="simulator" />
       case "arsip":
         return <ArsipView theme={theme} />
       case "pengaturan":
@@ -89,7 +104,7 @@ function MainLayout() {
   return (
     <div
       className={`flex h-screen font-sans overflow-hidden transition-colors duration-300 ${
-        isDark ? "bg-[#080c14] text-gray-100" : "bg-slate-100 text-slate-900"
+        isDark ? "bg-transparent text-slate-100" : "bg-slate-100 text-slate-900"
       }`}
     >
       {/* Sidebar Navigation */}

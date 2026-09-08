@@ -12,9 +12,9 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
 
   return (
     <header
-      className={`h-16 border-b-2 px-6 flex items-center justify-between backdrop-blur-sm shrink-0 transition-colors duration-300 ${isDark
-        ? "bg-[#080c14]/90 border-red-600/30 text-white"
-        : "bg-white/95 border-red-600/20 text-black shadow-xs"
+      className={`h-16 border-b px-6 flex items-center justify-between backdrop-blur-md shrink-0 transition-colors duration-300 ${isDark
+        ? "bg-[#0f172a]/85 border-white/10 text-white"
+        : "bg-white/95 border-slate-200 text-black shadow-xs"
         }`}
     >
       {/* Search Bar on far left */}
