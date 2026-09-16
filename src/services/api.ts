@@ -109,3 +109,47 @@ export const finalisasiSuratAtomic = async (id_surat_keluar: number, id_pegawai:
     created_at: new Date().toISOString(),
   };
 };
+
+export const fetchFilterOptions = async (): Promise<any> => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/arsip/filter-options`);
+    if (res.ok) return await res.json();
+  } catch (e) {
+    console.warn('Backend API call failed for filter options', e);
+  }
+  return null;
+};
+
+export const fetchArsip = async (filters: any): Promise<any[]> => {
+  try {
+    const query = new URLSearchParams();
+    if (filters.search) query.append('search', filters.search);
+    if (filters.year) query.append('year', filters.year);
+    if (filters.month) query.append('month', filters.month);
+    if (filters.event) query.append('event', filters.event);
+    if (filters.kategori) query.append('kategori', filters.kategori);
+    if (filters.hak_akses) query.append('hak_akses', filters.hak_akses);
+    if (filters.sub_bagian) query.append('sub_bagian', filters.sub_bagian);
+    
+    const res = await fetch(`${API_BASE_URL}/arsip/?${query.toString()}`);
+    if (res.ok) return await res.json();
+  } catch (e) {
+    console.warn('Backend API call failed for fetchArsip', e);
+  }
+  return [];
+};
+
+export const uploadArsip = async (payload: any): Promise<any> => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/arsip/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) return await res.json();
+    else console.error("Upload failed", await res.text());
+  } catch (e) {
+    console.error('Backend API call failed for uploadArsip', e);
+  }
+  return null;
+};

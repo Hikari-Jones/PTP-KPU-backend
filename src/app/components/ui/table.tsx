@@ -9,15 +9,15 @@ export function Table({ className = "", ...props }: React.HTMLAttributes<HTMLTab
 }
 
 export function TableHeader({ className = "", ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
-  return <thead className={`border-b border-[#1e293b] text-xs font-semibold uppercase tracking-wider ${className}`} {...props} />
+  return <thead className={`border-b border-slate-200 dark:border-white/30 text-xs font-semibold uppercase tracking-wider ${className}`} {...props} />
 }
 
 export function TableBody({ className = "", ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
-  return <tbody className={`divide-y divide-[#1e293b]/50 ${className}`} {...props} />
+  return <tbody className={`divide-y divide-slate-100 dark:divide-white/20 ${className}`} {...props} />
 }
 
 export function TableRow({ className = "", ...props }: React.HTMLAttributes<HTMLTableRowElement>) {
-  return <tr className={`transition-colors hover:bg-[#1e293b]/40 ${className}`} {...props} />
+  return <tr className={`border-b border-slate-100 dark:border-white/20 transition-colors hover:bg-slate-50 dark:hover:bg-white/[0.05] ${className}`} {...props} />
 }
 
 export function TableHead({ className = "", ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) {

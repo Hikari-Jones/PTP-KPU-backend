@@ -127,7 +127,7 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
 
           <button
             onClick={handleDownloadExcel}
-            className="px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-sm flex items-center gap-1.5 cursor-pointer transition-all shrink-0 active:scale-95"
+            className="btn-kpu-red px-3.5 py-1.5 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer transition-all shrink-0 active:scale-95"
           >
             <Download className="w-4 h-4" />
             <span>Unduh Laporan (.xlsx / .csv)</span>
@@ -136,11 +136,11 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
 
         {/* Modal Table Body */}
         <div className="p-4 overflow-y-auto flex-1">
-          <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200"}>
+          <Card className={isDark ? "bg-[#0d1322] border-white/10" : "bg-white border-slate-200"}>
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                  <TableRow className={isDark ? "border-b border-white/30 bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
                     <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>No. Dokumen</TableHead>
                     <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Tanggal</TableHead>
                     <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>Kode & Nama Akun</TableHead>
@@ -162,7 +162,7 @@ export function LaporanBulananModal({ isOpen, onClose, transaksiList, theme }: P
                       <TableRow
                         key={item.id}
                         className={
-                          isDark ? "border-b border-[#1e293b]/40 hover:bg-[#131d30]" : "border-b border-slate-100 hover:bg-slate-50"
+                          isDark ? "border-b border-white/20 hover:bg-white/[0.05]" : "border-b border-slate-100 hover:bg-slate-50"
                         }
                       >
                         <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400">{item.noDokumen}</TableCell>

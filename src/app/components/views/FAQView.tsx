@@ -42,27 +42,31 @@ export function FAQView({ theme }: { theme: "light" | "dark" }) {
           return (
             <Card
               key={idx}
-              className={`transition-colors cursor-pointer ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"
+              className={`transition-all duration-200 cursor-pointer ${isDark ? "bg-[#0d1322] border-[#1e293b] hover:border-white/20" : "bg-white border-slate-200 shadow-sm hover:shadow-md"
                 }`}
               onClick={() => setOpenIdx(isOpen ? null : idx)}
             >
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between gap-4 w-full">
-                  <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                    <div className="w-9 h-9 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                      <HelpCircle className="w-4 h-4" />
-                    </div>
-                    <h3 className={`text-sm font-bold my-0 leading-snug ${isDark ? "text-white" : "text-black"}`}>{faq.q}</h3>
+              <CardContent className="p-4 sm:p-5">
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+                    <HelpCircle className="w-4 h-4" />
                   </div>
-                  <div className="shrink-0 flex items-center justify-center">
-                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180 text-red-600" : "text-slate-500"}`} />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-3 min-h-[32px]">
+                      <h3 className={`text-sm font-bold my-0 leading-snug ${isDark ? "text-white" : "text-black"}`}>
+                        {faq.q}
+                      </h3>
+                      <div className="shrink-0 w-6 h-6 flex items-center justify-center">
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180 text-red-600" : "text-slate-400"}`} />
+                      </div>
+                    </div>
+                    {isOpen && (
+                      <div className={`mt-3 pt-3 border-t text-xs font-semibold leading-relaxed ${isDark ? "border-white/10 text-gray-300" : "border-slate-100 text-slate-700"}`}>
+                        {faq.a}
+                      </div>
+                    )}
                   </div>
                 </div>
-                {isOpen && (
-                  <p className={`mt-3 pt-3 border-t text-xs font-semibold leading-relaxed pl-12.5 ${isDark ? "border-[#1e293b] text-gray-200" : "border-slate-100 text-slate-800"}`}>
-                    {faq.a}
-                  </p>
-                )}
               </CardContent>
             </Card>
           )

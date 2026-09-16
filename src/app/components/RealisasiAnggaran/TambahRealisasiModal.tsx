@@ -332,7 +332,7 @@ export function TambahRealisasiModal({ isOpen, onClose, akunList, onSave, theme 
               type="button"
               disabled={isOverBudget}
               onClick={handleKirimVerifikasi}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md shadow-red-600/30 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
+              className="btn-kpu-red px-5 py-2.5 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Kirim untuk Verifikasi</span>

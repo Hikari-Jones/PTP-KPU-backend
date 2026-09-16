@@ -101,7 +101,7 @@ export function ProfilView({ theme }: { theme: "light" | "dark" }) {
 
         <Card className={`transition-all ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
           <CardContent className="p-5 flex items-center gap-4 min-h-[96px]">
-            <div className="w-12 h-12 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-12 h-12 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 shadow-xs">
               <Phone className="w-5 h-5" />
             </div>
             <div className="flex-1 flex flex-col justify-center min-w-0">

@@ -6,7 +6,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Badge({ className = "", variant = "default", ...props }: BadgeProps) {
   let variantStyles = "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30 font-bold"
-  
+
   if (variant === "terkirim" || variant === "success" || variant === "diterima") {
     variantStyles = "bg-slate-900 text-white dark:bg-white dark:text-slate-950 border border-slate-700 dark:border-slate-300 font-bold shadow-xs"
   } else if (variant === "diproses" || variant === "info") {

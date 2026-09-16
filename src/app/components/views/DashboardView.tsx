@@ -260,7 +260,7 @@ export function DashboardView({ theme }: { theme: "light" | "dark" }) {
                 <TableHeader>
                   <TableRow
                     className={
-                      isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"
+                      isDark ? "border-b border-white/30 bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"
                     }
                   >
                     <TableHead className={`text-[11px] font-extrabold uppercase tracking-wider ${isDark ? "text-white" : "text-black"}`}>
@@ -285,7 +285,7 @@ export function DashboardView({ theme }: { theme: "light" | "dark" }) {
                     <TableRow
                       key={idx}
                       className={
-                        isDark ? "hover:bg-[#1e293b]/40 border-b border-[#1e293b]/40" : "hover:bg-slate-50 border-b border-slate-100"
+                        isDark ? "hover:bg-white/[0.05] border-b border-white/20" : "hover:bg-slate-50 border-b border-slate-100"
                       }
                     >
                       <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400">{row.no}</TableCell>

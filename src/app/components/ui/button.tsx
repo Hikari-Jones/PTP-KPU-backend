@@ -7,16 +7,16 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = "", variant = "default", size = "default", ...props }, ref) => {
-    let variantStyles = "bg-[#dc2626] text-white hover:bg-[#b91c1c]"
-    if (variant === "outline") variantStyles = "border border-[#1e293b] bg-transparent hover:bg-[#1e293b] text-gray-200"
-    if (variant === "secondary") variantStyles = "bg-[#1e293b] text-gray-200 hover:bg-[#334155]"
-    if (variant === "ghost") variantStyles = "hover:bg-[#1e293b]/60 text-gray-300 hover:text-white"
-    if (variant === "danger") variantStyles = "bg-red-600 text-white hover:bg-red-700"
+    let variantStyles = "btn-kpu-red"
+    if (variant === "outline") variantStyles = "border border-slate-300 dark:border-white/20 bg-transparent hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-gray-200"
+    if (variant === "secondary") variantStyles = "bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-gray-200 hover:bg-slate-300 dark:hover:bg-slate-700"
+    if (variant === "ghost") variantStyles = "hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-gray-300 hover:text-black dark:hover:text-white"
+    if (variant === "danger") variantStyles = "btn-kpu-red"
 
     let sizeStyles = "h-9 px-4 py-2 text-sm"
-    if (size === "sm") sizeStyles = "h-8 rounded-md px-3 text-xs"
-    if (size === "lg") sizeStyles = "h-10 rounded-md px-8 text-base"
-    if (size === "icon") sizeStyles = "h-9 w-9 p-0 flex items-center justify-center rounded-lg"
+    if (size === "sm") sizeStyles = "h-8 rounded-lg px-3 text-xs"
+    if (size === "lg") sizeStyles = "h-10 rounded-xl px-8 text-base"
+    if (size === "icon") sizeStyles = "h-9 w-9 p-0 flex items-center justify-center rounded-xl"
 
     return (
       <button

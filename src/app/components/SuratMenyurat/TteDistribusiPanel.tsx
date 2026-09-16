@@ -190,7 +190,7 @@ QR Hash Code  : ${surat.tteInfo?.barcodeData || "KPU-SULUT-TTE-SECURE-HASH-2026-
               <button
                 type="submit"
                 disabled={isSigning}
-                className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-red-600/30 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98"
+                className="w-full py-2.5 btn-kpu-red text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-98"
               >
                 {isSigning ? (
                   <span>Proses Verifikasi Enkripsi Hash BSrE...</span>

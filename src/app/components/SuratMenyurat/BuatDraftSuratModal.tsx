@@ -230,7 +230,7 @@ export function BuatDraftSuratModal({ theme, isOpen, onClose, onSubmit }: BuatDr
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs rounded-xl font-semibold shadow-md shadow-red-600/30 flex items-center gap-1.5 cursor-pointer"
+              className="btn-kpu-red px-5 py-2.5 text-white text-xs rounded-xl font-bold flex items-center gap-1.5 cursor-pointer active:scale-95"
             >
               <Send className="w-4 h-4" />
               <span>Simpan & Ajukan Verifikasi</span>

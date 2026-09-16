@@ -3,6 +3,7 @@ import {
   UserCheck,
   CheckCircle2,
   Building,
+  Send,
 } from "lucide-react"
 import { Card, CardContent } from "../ui/card"
 import { Badge } from "../ui/badge"
@@ -202,15 +203,36 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
               )}
               <button
                 type="submit"
-                className="ml-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-xl shadow-md shadow-red-600/30 flex items-center gap-1.5 cursor-pointer"
+                className="ml-auto btn-kpu-red px-4 py-2 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer active:scale-95"
               >
-                <UserCheck className="w-4 h-4" />
-                <span>Simpan Disposisi Pimpinan</span>
+                <Send className="w-4 h-4" />
+                <span>Simpan Lembar Disposisi</span>
               </button>
             </div>
           </form>
         </CardContent>
       </Card>
+
+      {/* Kirim Nota Dinas Lanjutan Modal / Prompt */}
+      <div className={`p-4 rounded-2xl border flex items-center justify-between ${isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}`}>
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-red-600/10 text-red-600 dark:text-red-400">
+            <Send className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="text-xs font-bold">Lanjutkan dengan Nota Dinas Internal</h4>
+            <p className={`text-[11px] font-medium ${isDark ? "text-gray-400" : "text-slate-600"}`}>
+              Jika disposisi membutuhkan nota dinas balasan dari subbagian teknis.
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={() => alert("Membuka form Nota Dinas internal otomatis terhubung dengan surat ini...")}
+          className="btn-kpu-red px-3.5 py-2 text-white text-xs font-bold rounded-xl cursor-pointer transition-all active:scale-95"
+        >
+          + Buat Nota Dinas
+        </button>
+      </div>
 
       {/* Verifikasi & Status Tindak Lanjut oleh Subbag Tujuan */}
       <Card className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
@@ -232,7 +254,7 @@ export function DisposisiAlurPanel({ theme, surat, onSaveDisposisi, onUpdateStat
               onClick={() =>
                 onUpdateStatus(surat.id, "dalam_proses", "Unit pelaksana memulai tindak lanjut penyusunan tanggapan.")
               }
-              className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-xl cursor-pointer transition-all"
+              className="btn-kpu-red px-3.5 py-2 text-white text-xs font-bold rounded-xl cursor-pointer transition-all active:scale-95"
             >
               Set Status: Dalam Proses
             </button>

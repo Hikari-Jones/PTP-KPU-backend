@@ -455,11 +455,11 @@ TOTAL,,2700000000,2055000000,645000000,76.1%`
       ) : (
         <button
           onClick={() => setIsOpen(true)}
-          className="relative group p-4 rounded-2xl bg-gradient-to-r from-red-600 to-red-700 text-white shadow-xl shadow-red-600/30 hover:scale-105 active:scale-95 transition-all duration-200 border border-red-500/30 flex items-center justify-center cursor-pointer"
+          className="relative group p-4 rounded-2xl btn-kpu-red text-white hover:scale-105 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer"
           title="Buka KIRANA Agent"
         >
           <MessageSquare className="w-6 h-6" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-black text-white dark:bg-white dark:text-black rounded-full text-[9px] font-black flex items-center justify-center border border-red-600 shadow-xs">
+          <span className="absolute -top-1 -right-1 w-4 h-4 bg-black text-white dark:bg-white dark:text-black rounded-full text-[9px] font-black flex items-center justify-center border border-white/20 shadow-xs">
             AI
           </span>
         </button>

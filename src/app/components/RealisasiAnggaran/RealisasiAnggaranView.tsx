@@ -27,11 +27,11 @@ interface Props {
 
 const SERAPAN_SUBBAGIAN_DATA = [
   { nama: "Keuangan", pct: 70, realisasi: "10.36", pagu: "14.80", color: "bg-red-600" },
-  { nama: "Teknis Penyelenggaraan Pemilu", pct: 78, realisasi: "9.67", pagu: "12.40", color: "bg-red-700" },
-  { nama: "SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)", pct: 64, realisasi: "5.89", pagu: "9.20", color: "bg-slate-900 dark:bg-white" },
+  { nama: "Teknis Penyelenggaraan Pemilu", pct: 78, realisasi: "9.67", pagu: "12.40", color: "bg-red-600" },
+  { nama: "SDM (Partisipasi Hubungan Masyarakat dan Sumber Daya Manusia)", pct: 64, realisasi: "5.89", pagu: "9.20", color: "bg-red-600" },
   { nama: "PERDATIN (Perencanaan, Data dan Informasi)", pct: 68, realisasi: "5.17", pagu: "7.60", color: "bg-red-600" },
-  { nama: "Hukum", pct: 65, realisasi: "3.76", pagu: "5.78", color: "bg-slate-800 dark:bg-slate-300" },
-  { nama: "UMLOG (Umum dan Logistik)", pct: 55, realisasi: "4.10", pagu: "6.20", color: "bg-red-500" },
+  { nama: "Hukum", pct: 65, realisasi: "3.76", pagu: "5.78", color: "bg-red-600" },
+  { nama: "UMLOG (Umum dan Logistik)", pct: 55, realisasi: "4.10", pagu: "6.20", color: "bg-red-600" },
 ]
 
 const TOP_AKUN_DATA = [
@@ -157,7 +157,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className={`text-2xl font-bold tracking-tight my-0 ${isDark ? "text-white" : "text-black"}`}>
-            Realisasi Anggaran {subTab === "ringkasan" && "— Ringkasan Overview"}
+            Realisasi Anggaran {subTab === "ringkasan" && "— Overview"}
             {subTab === "transaksi" && "— Daftar Transaksi"}
             {subTab === "laporan" && "— Laporan Bulanan"}
             {subTab === "verifikasi" && "— Verifikasi Dokumen"}
@@ -171,7 +171,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsFormOpen(true)}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-lg shadow-red-600/30 flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95"
+            className="btn-kpu-red px-4 py-2 text-white font-bold text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-all active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Realisasi</span>
@@ -180,8 +180,8 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
           <button
             onClick={() => setIsLaporanOpen(true)}
             className={`px-4 py-2 rounded-xl border text-xs font-bold flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95 shadow-sm ${isDark
-                ? "border-slate-700 bg-slate-900 text-white hover:bg-slate-800"
-                : "border-slate-300 bg-white text-black hover:bg-slate-50"
+              ? "border-slate-700 bg-slate-900 text-white hover:bg-slate-800"
+              : "border-slate-300 bg-white text-black hover:bg-slate-50"
               }`}
           >
             <FileSpreadsheet className="w-4 h-4 text-red-600" />
@@ -206,8 +206,8 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                   value={selectedTA}
                   onChange={(e) => setSelectedTA(e.target.value)}
                   className={`appearance-none font-bold text-xs px-3.5 py-2 pr-8 rounded-xl border cursor-pointer ${isDark
-                      ? "bg-[#131b2e] border-[#1e293b] text-white hover:border-red-500"
-                      : "bg-slate-50 border-slate-300 text-black hover:border-red-500"
+                    ? "bg-[#131b2e] border-[#1e293b] text-white hover:border-red-500"
+                    : "bg-slate-50 border-slate-300 text-black hover:border-red-500"
                     }`}
                 >
                   <option value="TA 2025">TA 2025</option>
@@ -222,8 +222,8 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                   value={selectedSubbagianFilter}
                   onChange={(e) => setSelectedSubbagianFilter(e.target.value)}
                   className={`appearance-none font-bold text-xs px-3.5 py-2 pr-8 rounded-xl border cursor-pointer ${isDark
-                      ? "bg-[#131b2e] border-[#1e293b] text-white hover:border-red-500"
-                      : "bg-slate-50 border-slate-300 text-black hover:border-red-500"
+                    ? "bg-[#131b2e] border-[#1e293b] text-white hover:border-red-500"
+                    : "bg-slate-50 border-slate-300 text-black hover:border-red-500"
                     }`}
                 >
                   <option value="Semua Subbagian">Semua Subbagian</option>
@@ -243,8 +243,8 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                   value={selectedProgramFilter}
                   onChange={(e) => setSelectedProgramFilter(e.target.value)}
                   className={`appearance-none font-bold text-xs px-3.5 py-2 pr-8 rounded-xl border cursor-pointer ${isDark
-                      ? "bg-[#131b2e] border-[#1e293b] text-white hover:border-red-500"
-                      : "bg-slate-50 border-slate-300 text-black hover:border-red-500"
+                    ? "bg-[#131b2e] border-[#1e293b] text-white hover:border-red-500"
+                    : "bg-slate-50 border-slate-300 text-black hover:border-red-500"
                     }`}
                 >
                   <option value="Semua Program">Semua Program</option>
@@ -283,13 +283,13 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Card 1: TOTAL PAGU ANGGARAN */}
             <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
-              <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-900 dark:bg-slate-400"></div>
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
               <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
                   <p className={`text-[11px] font-extrabold tracking-wider uppercase ${isDark ? "text-gray-300" : "text-slate-900"}`}>
                     Total Pagu Anggaran
                   </p>
-                  <h2 className={`text-2xl font-black mt-1 tracking-tight ${isDark ? "text-white" : "text-black"}`}>
+                  <h2 className="text-2xl font-black mt-1 tracking-tight text-[#dc2626] dark:text-[#ef4444]">
                     Rp 45.78 M
                   </h2>
                 </div>
@@ -307,16 +307,16 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
               <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
               <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
-                  <p className="text-[11px] font-extrabold tracking-wider uppercase text-red-600 dark:text-red-400">
+                  <p className={`text-[11px] font-extrabold tracking-wider uppercase ${isDark ? "text-gray-300" : "text-slate-900"}`}>
                     Total Realisasi
                   </p>
-                  <h2 className="text-2xl font-black mt-1 tracking-tight text-red-600 dark:text-red-500">
+                  <h2 className="text-2xl font-black mt-1 tracking-tight text-[#dc2626] dark:text-[#ef4444]">
                     Rp 31.25 M
                   </h2>
                 </div>
                 <div className={`pt-2.5 border-t flex items-center justify-between text-xs ${isDark ? "border-slate-800" : "border-slate-200"}`}>
                   <span className={`font-bold ${isDark ? "text-gray-300" : "text-black"}`}>s.d. September 2025</span>
-                  <span className="text-red-600 dark:text-red-400 font-black text-xs flex items-center gap-1">
+                  <span className="text-[#dc2626] dark:text-[#ef4444] font-black text-xs flex items-center gap-1">
                     <TrendingUp className="w-3.5 h-3.5" />
                     68.3% terserap
                   </span>
@@ -326,19 +326,19 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
 
             {/* Card 3: SISA ANGGARAN */}
             <Card className={`relative overflow-hidden transition-all ${isDark ? "bg-[#1e293b]/70 border-white/10" : "bg-white/85 border-slate-200"} backdrop-blur-md shadow-lg rounded-2xl`}>
-              <div className="absolute top-0 left-0 w-1.5 h-full bg-slate-900 dark:bg-slate-400"></div>
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
               <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
                   <p className={`text-[11px] font-extrabold tracking-wider uppercase ${isDark ? "text-gray-300" : "text-slate-900"}`}>
                     Sisa Anggaran
                   </p>
-                  <h2 className={`text-2xl font-black mt-1 tracking-tight ${isDark ? "text-white" : "text-black"}`}>
+                  <h2 className="text-2xl font-black mt-1 tracking-tight text-[#dc2626] dark:text-[#ef4444]">
                     Rp 14.53 M
                   </h2>
                 </div>
                 <div className={`pt-2.5 border-t flex items-center justify-between text-xs ${isDark ? "border-slate-800" : "border-slate-200"}`}>
                   <span className={`font-bold ${isDark ? "text-gray-300" : "text-black"}`}>Belum terserap</span>
-                  <span className="px-2 py-0.5 rounded bg-red-600/10 text-red-600 dark:text-red-400 text-[11px] font-extrabold border border-red-500/20">31.7% Sisa</span>
+                  <span className="px-2 py-0.5 rounded bg-red-600/10 text-[#dc2626] dark:text-[#ef4444] text-[11px] font-extrabold border border-red-500/20">31.7% Sisa</span>
                 </div>
               </CardContent>
             </Card>
@@ -348,11 +348,11 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
               <div className="absolute top-0 left-0 w-1.5 h-full bg-red-600"></div>
               <CardContent className="p-5 pl-6 flex flex-col justify-center min-h-[135px] space-y-2">
                 <div>
-                  <p className="text-[11px] font-extrabold tracking-wider uppercase text-red-600 dark:text-red-400">
+                  <p className={`text-[11px] font-extrabold tracking-wider uppercase ${isDark ? "text-gray-300" : "text-slate-900"}`}>
                     Persentase Realisasi
                   </p>
                   <div className="flex items-baseline justify-between mt-1">
-                    <h2 className="text-2xl font-black tracking-tight text-red-600 dark:text-red-500">
+                    <h2 className="text-2xl font-black tracking-tight text-[#dc2626] dark:text-[#ef4444]">
                       68.3%
                     </h2>
                     <span className={`text-[11px] font-bold ${isDark ? "text-gray-300" : "text-black"}`}>Target: 75%</span>
@@ -451,7 +451,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                  <TableRow className={isDark ? "border-b border-white/30 bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
                     <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>NO. SK / DOKUMEN</TableHead>
                     <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>AKUN ANGGARAN</TableHead>
                     <TableHead className={`text-[11px] font-extrabold uppercase ${isDark ? "text-white" : "text-black"}`}>SUBBAGIAN</TableHead>
@@ -460,7 +460,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                 </TableHeader>
                 <TableBody>
                   {transaksiList.map((t) => (
-                    <TableRow key={t.id} className={isDark ? "border-b border-[#1e293b]/40 hover:bg-[#131d30]" : "border-b border-slate-100 hover:bg-slate-50"}>
+                    <TableRow key={t.id} className={isDark ? "border-b border-white/20 hover:bg-white/[0.05]" : "border-b border-slate-100 hover:bg-slate-50"}>
                       <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400 whitespace-nowrap">{t.noDokumen}</TableCell>
                       <TableCell className="text-xs">
                         <span className={`font-mono font-bold block ${isDark ? "text-white" : "text-black"}`}>{t.kodeAkun}</span>
@@ -527,7 +527,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                  <TableRow className={isDark ? "border-b border-white/30 bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
                     <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>No. Dokumen</TableHead>
                     <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>Tanggal</TableHead>
                     <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>Akun Anggaran</TableHead>
@@ -539,7 +539,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                 </TableHeader>
                 <TableBody>
                   {filteredTransactions.map((item) => (
-                    <TableRow key={item.id} className={isDark ? "border-b border-[#1e293b]/40 hover:bg-[#131d30]" : "border-b border-slate-100 hover:bg-slate-50"}>
+                    <TableRow key={item.id} className={isDark ? "border-b border-white/20 hover:bg-white/[0.05]" : "border-b border-slate-100 hover:bg-slate-50"}>
                       <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400">{item.noDokumen}</TableCell>
                       <TableCell className={`text-xs font-semibold whitespace-nowrap ${isDark ? "text-gray-300" : "text-black"}`}>{item.tanggal}</TableCell>
                       <TableCell className="text-xs">
@@ -580,7 +580,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
               </div>
               <button
                 onClick={() => setIsLaporanOpen(true)}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md shadow-red-600/20 flex items-center gap-2 cursor-pointer transition-all"
+                className="btn-kpu-red px-4 py-2 text-white font-bold text-xs rounded-xl flex items-center gap-2 cursor-pointer transition-all active:scale-95"
               >
                 <FileSpreadsheet className="w-4 h-4" />
                 <span>Unduh Laporan (.csv / .xlsx)</span>
@@ -589,7 +589,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                  <TableRow className={isDark ? "border-b border-white/30 bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
                     <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>KODE AKUN</TableHead>
                     <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>NAMA AKUN</TableHead>
                     <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>PAGU (RP)</TableHead>
@@ -599,7 +599,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                 </TableHeader>
                 <TableBody>
                   {akunList.map((a) => (
-                    <TableRow key={a.kode} className={isDark ? "border-b border-[#1e293b]" : "border-b border-slate-100 hover:bg-slate-50"}>
+                    <TableRow key={a.kode} className={isDark ? "border-b border-white/20 hover:bg-white/[0.05]" : "border-b border-slate-100 hover:bg-slate-50"}>
                       <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400">{a.kode}</TableCell>
                       <TableCell className={`text-xs font-bold ${isDark ? "text-white" : "text-black"}`}>{a.nama}</TableCell>
                       <TableCell className={`text-xs font-bold ${isDark ? "text-gray-200" : "text-black"}`}>{formatRupiah(a.pagu)}</TableCell>
@@ -628,7 +628,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
             <CardContent className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className={isDark ? "border-b border-[#1e293b] bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
+                  <TableRow className={isDark ? "border-b border-white/30 bg-[#0a0e1a]" : "border-b border-slate-200 bg-slate-100"}>
                     <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>NO. DOKUMEN</TableHead>
                     <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>USULAN & SUBBAGIAN</TableHead>
                     <TableHead className={`text-[11px] font-extrabold ${isDark ? "text-white" : "text-black"}`}>JUMLAH REALISASI</TableHead>
@@ -638,7 +638,7 @@ export function RealisasiAnggaranView({ theme, subTab = "ringkasan" }: Props) {
                 </TableHeader>
                 <TableBody>
                   {transaksiList.map((t) => (
-                    <TableRow key={t.id} className={isDark ? "border-b border-[#1e293b]" : "border-b border-slate-100 hover:bg-slate-50"}>
+                    <TableRow key={t.id} className={isDark ? "border-b border-white/20 hover:bg-white/[0.05]" : "border-b border-slate-100 hover:bg-slate-50"}>
                       <TableCell className="font-mono text-xs font-bold text-red-600 dark:text-red-400">{t.noDokumen}</TableCell>
                       <TableCell className="text-xs">
                         <p className={`font-bold ${isDark ? "text-white" : "text-black"}`}>{t.usulanKegiatan}</p>

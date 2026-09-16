@@ -4,7 +4,7 @@ export interface UserProfile {
   name: string
   nip: string
   email: string
-  role: "Admin" | "Operator" | "User"
+  role: "Superadmin" | "Kabag" | "Kasubag" | "Staff"
   jabatan: string
   subbagian: string
 }
@@ -22,7 +22,7 @@ const DEFAULT_USERS: UserProfile[] = [
     name: "Admin KPU Sulut",
     nip: "198507182020031001",
     email: "admin@kpu.go.id",
-    role: "Admin",
+    role: "Superadmin",
     jabatan: "Administrator Sistem",
     subbagian: "PERDATIN (Perencanaan, Data dan Informasi)",
   },
@@ -30,7 +30,7 @@ const DEFAULT_USERS: UserProfile[] = [
     name: "Ahmad Kurniawan",
     nip: "199208052021011002",
     email: "ahmad.kurniawan@kpu.go.id",
-    role: "Operator",
+    role: "Staff",
     jabatan: "Staf Bidang Teknis Penyelenggaraan",
     subbagian: "Teknis Penyelenggaraan Pemilu",
   },
@@ -63,8 +63,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     if (matchedUser) {
       // Validate password for known users
-      if ((matchedUser.role === "Admin" && pass === "admin123") ||
-          (matchedUser.role === "Operator" && (pass === "123456" || pass === "••••••••" || pass.length >= 4))) {
+      if ((matchedUser.role === "Superadmin" && pass === "admin123") ||
+          (matchedUser.role !== "Superadmin" && (pass === "123456" || pass === "••••••••" || pass.length >= 4))) {
         setCurrentUser(matchedUser)
         return { success: true }
       } else {
@@ -78,7 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         name: trimmedNip.slice(-4).padStart(8, "KPU"),
         nip: trimmedNip,
         email: `${trimmedNip}@kpu.go.id`,
-        role: "Operator",
+        role: "Staff",
         jabatan: "Staf Penyelenggara KPU",
         subbagian: "Sekretariat KPU Sulut",
       }

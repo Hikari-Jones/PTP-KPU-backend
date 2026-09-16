@@ -90,7 +90,7 @@ export function PengaturanView({ theme, onToggleTheme }: { theme: "light" | "dar
           </div>
           <button
             onClick={onToggleTheme}
-            className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold cursor-pointer shadow-md shadow-red-600/30 active:scale-95 transition-all"
+            className="btn-kpu-red px-4 py-2 rounded-xl text-white text-xs font-bold cursor-pointer active:scale-95 transition-all"
           >
             Switch to {isDark ? "Light Mode" : "Dark Mode"}
           </button>

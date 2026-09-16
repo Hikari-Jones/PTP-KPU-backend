@@ -195,7 +195,7 @@ export function VerifikasiDraftPanel({
                   </button>
                   <button
                     type="submit"
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-red-600 hover:bg-red-700 text-white cursor-pointer"
+                    className="btn-kpu-red px-4 py-2 text-xs font-bold rounded-xl text-white cursor-pointer active:scale-95"
                   >
                     Kirim Catatan Revisi
                   </button>

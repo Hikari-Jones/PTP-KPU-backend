@@ -7,8 +7,6 @@ import {
   AlertCircle,
   ShieldAlert,
   UserCheck,
-  Sun,
-  Moon,
   IdCard,
   FileText,
   Wallet,
@@ -136,21 +134,7 @@ export function LoginForm({ theme = "light", onToggleTheme }: LoginFormProps) {
 
       {/* Panel Kanan — Form Login */}
       <div className={`flex-1 flex items-center justify-center p-6 sm:p-10 relative ${isDark ? "bg-[#060a12]" : "bg-white"}`}>
-        {onToggleTheme && (
-          <div className="absolute top-5 right-5 z-20">
-            <button
-              onClick={onToggleTheme}
-              className={`p-2.5 rounded-lg border transition-all flex items-center gap-2 text-xs font-medium cursor-pointer ${
-                isDark
-                  ? "border-slate-800 bg-[#0d1424] text-amber-400 hover:bg-[#152038]"
-                  : "border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100"
-              }`}
-              title="Ganti Tema"
-            >
-              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
-            </button>
-          </div>
-        )}
+
 
         <div className="w-full max-w-sm animate-in fade-in zoom-in-95 duration-300">
           {/* Branding ringkas untuk layar kecil */}
@@ -280,7 +264,7 @@ export function LoginForm({ theme = "light", onToggleTheme }: LoginFormProps) {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-red-700 hover:bg-red-600 text-white font-semibold h-10 rounded-lg flex items-center justify-center gap-2 text-sm transition-all mt-2 cursor-pointer"
+              className="w-full btn-kpu-red text-white font-semibold h-10 rounded-lg flex items-center justify-center gap-2 text-sm transition-all mt-2 cursor-pointer"
             >
               {isLoading ? (
                 <span>Memverifikasi kredensial...</span>

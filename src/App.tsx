@@ -67,7 +67,7 @@ function MainLayout() {
         return <RealisasiAnggaranView theme={theme} subTab="verifikasi" />
       case "surat":
       case "surat-summary":
-        return <SuratView theme={theme} subTab="dashboard" />
+        return <SuratView theme={theme} subTab="overview" />
       case "surat-keluar":
         return <SuratView theme={theme} subTab="surat-keluar" />
       case "surat-tugas":
@@ -103,9 +103,8 @@ function MainLayout() {
 
   return (
     <div
-      className={`flex h-screen font-sans overflow-hidden transition-colors duration-300 ${
-        isDark ? "bg-transparent text-slate-100" : "bg-slate-100 text-slate-900"
-      }`}
+      className={`flex h-screen font-sans overflow-hidden transition-colors duration-300 ${isDark ? "bg-transparent text-slate-100" : "bg-slate-100 text-slate-900"
+        }`}
     >
       {/* Sidebar Navigation */}
       <Sidebar

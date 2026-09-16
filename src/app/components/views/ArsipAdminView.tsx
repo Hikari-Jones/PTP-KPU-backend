@@ -21,7 +21,7 @@ export function ArsipAdminView({ theme }: { theme: "light" | "dark" }) {
             Manajemen backup database berkala dan arsip terenkripsi tingkat administrator
           </p>
         </div>
-        <button className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md shadow-red-600/30 flex items-center gap-2 cursor-pointer shrink-0 transition-all active:scale-95">
+        <button className="btn-kpu-red px-4 py-2 text-white font-bold text-xs rounded-xl flex items-center gap-2 cursor-pointer shrink-0 transition-all active:scale-95">
           <RefreshCw className="w-4 h-4" />
           <span>Jalankan Backup Sekarang</span>
         </button>
@@ -29,7 +29,7 @@ export function ArsipAdminView({ theme }: { theme: "light" | "dark" }) {
 
       <div className="space-y-3">
         {backups.map((item) => (
-          <Card key={item.id} className={isDark ? "bg-[#0d1322] border-[#1e293b]" : "bg-white border-slate-200 shadow-sm"}>
+          <Card key={item.id} className={isDark ? "bg-[#0d1322] border-white/10" : "bg-white border-slate-200 shadow-sm"}>
             <CardContent className="p-4 flex items-center justify-between gap-4">
               <div className="flex items-center gap-3.5">
                 <div className="p-2.5 rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-xs">
@@ -60,10 +60,10 @@ export function ArsipAdminView({ theme }: { theme: "light" | "dark" }) {
                     document.body.removeChild(a)
                     URL.revokeObjectURL(url)
                   }}
-                  className="p-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs cursor-pointer shadow-xs transition-all active:scale-95"
+                  className="btn-kpu-red p-2.5 rounded-xl text-white text-xs cursor-pointer transition-all active:scale-95"
                   title="Unduh Backup SQL"
                 >
-                  <Download className="w-3.5 h-3.5" />
+                  <Download className="w-4 h-4" />
                 </button>
               </div>
             </CardContent>

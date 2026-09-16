@@ -59,14 +59,14 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
   }, [isSuratActive])
 
   const realisasiSubmenus = [
-    { id: "realization-summary", label: "Ringkasan" },
+    { id: "realization-summary", label: "Overview" },
     { id: "realization-transactions", label: "Transaksi" },
     { id: "realization-reports", label: "Laporan" },
     { id: "realization-verification", label: "Verifikasi" },
   ]
 
   const suratSubmenus = [
-    { id: "surat-summary", label: "Dashboard" },
+    { id: "surat-summary", label: "Overview" },
     { id: "surat-keluar", label: "Surat Keluar" },
     { id: "surat-tugas", label: "Surat Tugas" },
     { id: "surat-klasifikasi", label: "Kode Klasifikasi" },
@@ -141,8 +141,8 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
           <button
             onClick={onToggleCollapse}
             className={`p-1.5 rounded-lg transition-colors cursor-pointer ${isDark
-                ? "hover:bg-[#1e293b] text-gray-400 hover:text-white"
-                : "hover:bg-slate-100 text-slate-500 hover:text-slate-900"
+                ? "hover:bg-[#1e293b] text-red-400/70 hover:text-red-400"
+                : "hover:bg-slate-100 text-red-600/60 hover:text-red-600"
               }`}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
@@ -166,7 +166,7 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
                 onClick={() => onSelectMenu("dashboard")}
                 title={collapsed ? "Dashboard" : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${activeMenu === "dashboard"
-                    ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
+                    ? "bg-red-600 text-white"
                     : isDark
                       ? "text-gray-400 hover:text-gray-100 hover:bg-[#131b2e]"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -214,7 +214,7 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
                           key={sub.id}
                           onClick={() => onSelectMenu(sub.id)}
                           className={`w-full flex items-center px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${isSubActive
-                              ? "bg-red-600 text-white shadow-sm font-bold"
+                              ? "bg-red-600 text-white font-bold"
                               : isDark
                                 ? "text-gray-400 hover:text-gray-100 hover:bg-[#131b2e]"
                                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -266,7 +266,7 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
                           key={sub.id}
                           onClick={() => onSelectMenu(sub.id)}
                           className={`w-full flex items-center px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${isSubActive
-                              ? "bg-red-600 text-white shadow-sm font-bold"
+                              ? "bg-red-600 text-white font-bold"
                               : isDark
                                 ? "text-gray-400 hover:text-gray-100 hover:bg-[#131b2e]"
                                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -286,7 +286,7 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
                 title={collapsed ? "Arsip Data" : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                   activeMenu === "arsip"
-                    ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
+                    ? "bg-red-600 text-white"
                     : isDark
                     ? "text-gray-400 hover:text-gray-100 hover:bg-[#131b2e]"
                     : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -301,7 +301,7 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
                 onClick={() => onSelectMenu("pengaturan")}
                 title={collapsed ? "Pengaturan" : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${activeMenu === "pengaturan"
-                    ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
+                    ? "bg-red-600 text-white"
                     : isDark
                       ? "text-gray-400 hover:text-gray-100 hover:bg-[#131b2e]"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -316,7 +316,7 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
                 onClick={() => onSelectMenu("faq")}
                 title={collapsed ? "FAQ" : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${activeMenu === "faq"
-                    ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
+                    ? "bg-red-600 text-white"
                     : isDark
                       ? "text-gray-400 hover:text-gray-100 hover:bg-[#131b2e]"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -331,7 +331,7 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
                 onClick={() => onSelectMenu("profil")}
                 title={collapsed ? "Profil" : undefined}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${activeMenu === "profil"
-                    ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
+                    ? "bg-red-600 text-white"
                     : isDark
                       ? "text-gray-400 hover:text-gray-100 hover:bg-[#131b2e]"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
@@ -343,8 +343,8 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
             </nav>
           </div>
 
-          {/* Admin Menu (Dynamic Routing for Role 'Admin') */}
-          {userRole === "Admin" && (
+          {/* Admin Menu (Dynamic Routing for Role 'Superadmin') */}
+          {userRole === "Superadmin" && (
             <div className="pt-2 border-t border-red-500/20">
               {!collapsed && (
                 <div className="px-3 mb-2 text-[10px] font-extrabold uppercase tracking-wider text-red-500 flex items-center gap-1.5">
@@ -362,7 +362,7 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
                       onClick={() => onSelectMenu(item.id)}
                       title={collapsed ? item.label : undefined}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer ${isActive
-                          ? "bg-gradient-to-r from-red-700 to-amber-700 text-white shadow-lg shadow-red-800/30"
+                          ? "bg-red-700 text-white"
                           : isDark
                             ? "text-red-400/80 hover:text-red-300 hover:bg-red-950/30 border border-red-900/20"
                             : "text-red-700 hover:text-red-900 hover:bg-red-50 border border-red-200"
@@ -381,31 +381,36 @@ export function Sidebar({ collapsed, onToggleCollapse, activeMenu, onSelectMenu,
 
       {/* Profile & Logout Footer */}
       <div className={`p-3 border-t-2 shrink-0 ${isDark ? "border-red-600/25" : "border-red-600/15"}`}>
-        <div
-          className={`flex items-center gap-3 p-2 rounded-xl border ${collapsed ? "justify-center" : ""
-            } ${isDark ? "bg-[#0d1424] border-[#1e293b]/60" : "bg-slate-50 border-slate-200"}`}
+        <button
+          onClick={() => onSelectMenu("profil")}
+          title={collapsed ? "Profil Saya" : undefined}
+          className={`w-full flex items-center gap-3 p-2 rounded-xl border transition-all cursor-pointer ${collapsed ? "justify-center" : ""
+            } ${isDark
+              ? "bg-[#0d1424] border-[#1e293b]/60 hover:border-red-500/40 hover:bg-[#131b2e]"
+              : "bg-slate-50 border-slate-200 hover:border-red-300 hover:bg-red-50/50"
+            }`}
         >
           <Avatar className="w-8 h-8 shrink-0 border border-red-500/40">
             <AvatarImage src="" alt={currentUser?.name || "User"} />
             <AvatarFallback className="bg-red-600 text-white font-bold text-xs">{initials}</AvatarFallback>
           </Avatar>
           {!collapsed && (
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1 overflow-hidden text-left">
               <p className={`text-xs font-semibold truncate ${isDark ? "text-gray-100" : "text-slate-800"}`}>
                 {currentUser?.name || "Pengguna"}
               </p>
               <p className={`text-[10px] truncate ${isDark ? "text-gray-400" : "text-slate-500"}`}>
-                {currentUser?.role === "Admin" ? "Administrator" : currentUser?.subbagian || "Staf Instansi"}
+                {currentUser?.role === "Superadmin" ? "Superadmin" : currentUser?.role}
               </p>
             </div>
           )}
-        </div>
+        </button>
 
         <button
           onClick={logout}
           className={`w-full mt-2 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${isDark
-              ? "text-gray-400 hover:text-red-400 hover:bg-red-950/20"
-              : "text-slate-600 hover:text-red-600 hover:bg-red-50"
+              ? "text-red-400/70 hover:text-red-400 hover:bg-red-950/20"
+              : "text-red-600/70 hover:text-red-600 hover:bg-red-50"
             } ${collapsed ? "justify-center px-0" : ""}`}
           title="Keluar"
         >
