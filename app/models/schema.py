@@ -160,6 +160,30 @@ class Pegawai(Base):
         back_populates="pegawai",
     )
 
+    tahun_anggaran_dibuat: Mapped[List["TahunAnggaran"]] = relationship(
+        "TahunAnggaran",
+        foreign_keys="TahunAnggaran.id_pegawai_pembuat",
+        back_populates="pembuat",
+    )
+
+    revisi_anggaran_dibuat: Mapped[List["RevisiAnggaran"]] = relationship(
+        "RevisiAnggaran",
+        foreign_keys="RevisiAnggaran.id_pegawai",
+        back_populates="pegawai",
+    )
+
+    realisasi_dibuat: Mapped[List["RealisasiAnggaran"]] = relationship(
+        "RealisasiAnggaran",
+        foreign_keys="RealisasiAnggaran.id_pegawai",
+        back_populates="operator",
+    )
+
+    realisasi_diverifikasi: Mapped[List["RealisasiAnggaran"]] = relationship(
+        "RealisasiAnggaran",
+        foreign_keys="RealisasiAnggaran.id_verifier",
+        back_populates="verifier",
+    )
+
 
 # =========================================================
 # 3. KODE KLASIFIKASI ARSIP
@@ -932,7 +956,84 @@ class DokumenArsip(Base):
 
 
 # =========================================================
-# 12. AKUN ANGGARAN
+# 12. TAHUN ANGGARAN
+# =========================================================
+
+class TahunAnggaran(Base):
+    __tablename__ = "tahun_anggaran"
+
+    id_tahun_anggaran: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    tahun: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+        unique=True,
+    )
+
+    status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="draft",
+        server_default="draft",
+    )
+
+    tanggal_mulai: Mapped[date] = mapped_column(
+        Date,
+        nullable=False,
+    )
+
+    tanggal_selesai: Mapped[date] = mapped_column(
+        Date,
+        nullable=False,
+    )
+
+    deskripsi: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    id_pegawai_pembuat: Mapped[Optional[int]] = mapped_column(
+        ForeignKey(
+            "pegawai.id_pegawai",
+            onupdate="CASCADE",
+            ondelete="SET NULL",
+        ),
+        nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+    )
+
+    # Relationships
+    pembuat: Mapped[Optional["Pegawai"]] = relationship(
+        "Pegawai",
+        foreign_keys=[id_pegawai_pembuat],
+        back_populates="tahun_anggaran_dibuat",
+    )
+
+    pagu_anggaran: Mapped[List["PaguAnggaran"]] = relationship(
+        "PaguAnggaran",
+        back_populates="tahun_anggaran",
+        cascade="all, delete-orphan",
+    )
+
+
+# =========================================================
+# 13. AKUN ANGGARAN
 # =========================================================
 
 class AkunAnggaran(Base):
@@ -964,11 +1065,47 @@ class AkunAnggaran(Base):
         nullable=False,
     )
 
+    # Legacy field - Preserved for existing data integrity
     total_pagu: Mapped[Decimal] = mapped_column(
         DECIMAL(18, 2),
         nullable=False,
         default=0,
         server_default="0",
+    )
+
+    jenis_belanja: Mapped[Optional[str]] = mapped_column(
+        String(100),
+        nullable=True,
+    )
+
+    program: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    sub_program: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    status: Mapped[str] = mapped_column(
+        String(20),
+        nullable=False,
+        default="active",
+        server_default="active",
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
     )
 
     # Relationships
@@ -977,15 +1114,195 @@ class AkunAnggaran(Base):
         back_populates="akun_anggaran",
     )
 
-    realisasi_anggaran: Mapped[List["RealisasiAnggaran"]] = relationship(
-        "RealisasiAnggaran",
+    pagu_anggaran: Mapped[List["PaguAnggaran"]] = relationship(
+        "PaguAnggaran",
         back_populates="akun_anggaran",
         cascade="all, delete-orphan",
     )
 
+    realisasi_anggaran: Mapped[List["RealisasiAnggaran"]] = relationship(
+        "RealisasiAnggaran",
+        foreign_keys="RealisasiAnggaran.id_akun_anggaran",
+        back_populates="akun_anggaran",
+    )
+
 
 # =========================================================
-# 13. REALISASI ANGGARAN
+# 14. PAGU ANGGARAN
+# =========================================================
+
+class PaguAnggaran(Base):
+    __tablename__ = "pagu_anggaran"
+    __table_args__ = (
+        UniqueConstraint("id_tahun_anggaran", "id_akun_anggaran", name="uq_pagu_tahun_akun"),
+    )
+
+    id_pagu: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    id_tahun_anggaran: Mapped[int] = mapped_column(
+        ForeignKey(
+            "tahun_anggaran.id_tahun_anggaran",
+            onupdate="CASCADE",
+            ondelete="RESTRICT",
+        ),
+        nullable=False,
+    )
+
+    id_akun_anggaran: Mapped[int] = mapped_column(
+        ForeignKey(
+            "akun_anggaran.id_akun_anggaran",
+            onupdate="CASCADE",
+            ondelete="RESTRICT",
+        ),
+        nullable=False,
+    )
+
+    pagu_awal: Mapped[Decimal] = mapped_column(
+        DECIMAL(18, 2),
+        nullable=False,
+        default=0,
+        server_default="0",
+    )
+
+    pagu_aktif: Mapped[Decimal] = mapped_column(
+        DECIMAL(18, 2),
+        nullable=False,
+        default=0,
+        server_default="0",
+    )
+
+    nomor_sk: Mapped[Optional[str]] = mapped_column(
+        String(100),
+        nullable=True,
+    )
+
+    tanggal_sk: Mapped[Optional[date]] = mapped_column(
+        Date,
+        nullable=True,
+    )
+
+    keterangan: Mapped[Optional[str]] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+    )
+
+    # Relationships
+    tahun_anggaran: Mapped["TahunAnggaran"] = relationship(
+        "TahunAnggaran",
+        back_populates="pagu_anggaran",
+    )
+
+    akun_anggaran: Mapped["AkunAnggaran"] = relationship(
+        "AkunAnggaran",
+        back_populates="pagu_anggaran",
+    )
+
+    revisi_anggaran: Mapped[List["RevisiAnggaran"]] = relationship(
+        "RevisiAnggaran",
+        back_populates="pagu_anggaran",
+    )
+
+    realisasi_anggaran: Mapped[List["RealisasiAnggaran"]] = relationship(
+        "RealisasiAnggaran",
+        foreign_keys="RealisasiAnggaran.id_pagu",
+        back_populates="pagu_anggaran",
+    )
+
+
+# =========================================================
+# 15. REVISI ANGGARAN
+# =========================================================
+
+class RevisiAnggaran(Base):
+    __tablename__ = "revisi_anggaran"
+
+    id_revisi: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    id_pagu: Mapped[int] = mapped_column(
+        ForeignKey(
+            "pagu_anggaran.id_pagu",
+            onupdate="CASCADE",
+            ondelete="RESTRICT",
+        ),
+        nullable=False,
+    )
+
+    id_pegawai: Mapped[int] = mapped_column(
+        ForeignKey(
+            "pegawai.id_pegawai",
+            onupdate="CASCADE",
+            ondelete="RESTRICT",
+        ),
+        nullable=False,
+    )
+
+    nomor_revisi: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+    )
+
+    tanggal_revisi: Mapped[date] = mapped_column(
+        Date,
+        nullable=False,
+    )
+
+    pagu_sebelum: Mapped[Decimal] = mapped_column(
+        DECIMAL(18, 2),
+        nullable=False,
+    )
+
+    pagu_sesudah: Mapped[Decimal] = mapped_column(
+        DECIMAL(18, 2),
+        nullable=False,
+    )
+
+    alasan_revisi: Mapped[str] = mapped_column(
+        Text,
+        nullable=False,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+    )
+
+    # Relationships
+    pagu_anggaran: Mapped["PaguAnggaran"] = relationship(
+        "PaguAnggaran",
+        back_populates="revisi_anggaran",
+    )
+
+    pegawai: Mapped["Pegawai"] = relationship(
+        "Pegawai",
+        foreign_keys=[id_pegawai],
+        back_populates="revisi_anggaran_dibuat",
+    )
+
+
+# =========================================================
+# 16. REALISASI ANGGARAN
 # =========================================================
 
 class RealisasiAnggaran(Base):
@@ -997,6 +1314,17 @@ class RealisasiAnggaran(Base):
         autoincrement=True,
     )
 
+    # New budget relationship (Nullable for legacy transactions)
+    id_pagu: Mapped[Optional[int]] = mapped_column(
+        ForeignKey(
+            "pagu_anggaran.id_pagu",
+            onupdate="CASCADE",
+            ondelete="RESTRICT",
+        ),
+        nullable=True,
+    )
+
+    # Legacy account relationship preserved
     id_akun_anggaran: Mapped[int] = mapped_column(
         ForeignKey(
             "akun_anggaran.id_akun_anggaran",
@@ -1004,6 +1332,26 @@ class RealisasiAnggaran(Base):
             ondelete="RESTRICT",
         ),
         nullable=False,
+    )
+
+    # Operator who recorded the transaction (Nullable for legacy rows)
+    id_pegawai: Mapped[Optional[int]] = mapped_column(
+        ForeignKey(
+            "pegawai.id_pegawai",
+            onupdate="CASCADE",
+            ondelete="RESTRICT",
+        ),
+        nullable=True,
+    )
+
+    # Verifier who approved/rejected the transaction
+    id_verifier: Mapped[Optional[int]] = mapped_column(
+        ForeignKey(
+            "pegawai.id_pegawai",
+            onupdate="CASCADE",
+            ondelete="SET NULL",
+        ),
+        nullable=True,
     )
 
     tanggal_transaksi: Mapped[date] = mapped_column(
@@ -1035,10 +1383,77 @@ class RealisasiAnggaran(Base):
         server_default="draft",
     )
 
+    periode: Mapped[Optional[str]] = mapped_column(
+        String(50),
+        nullable=True,
+    )
+
+    bukti_file_path: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    bukti_file_nama: Mapped[Optional[str]] = mapped_column(
+        String(255),
+        nullable=True,
+    )
+
+    bukti_file_ukuran: Mapped[Optional[int]] = mapped_column(
+        BigInteger,
+        nullable=True,
+    )
+
+    bukti_file_mime: Mapped[Optional[str]] = mapped_column(
+        String(100),
+        nullable=True,
+    )
+
+    catatan_verifikasi: Mapped[Optional[str]] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    verified_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime,
+        nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        server_default=func.current_timestamp(),
+        onupdate=func.current_timestamp(),
+    )
+
     # Relationships
+    pagu_anggaran: Mapped[Optional["PaguAnggaran"]] = relationship(
+        "PaguAnggaran",
+        foreign_keys=[id_pagu],
+        back_populates="realisasi_anggaran",
+    )
+
     akun_anggaran: Mapped["AkunAnggaran"] = relationship(
         "AkunAnggaran",
+        foreign_keys=[id_akun_anggaran],
         back_populates="realisasi_anggaran",
+    )
+
+    operator: Mapped[Optional["Pegawai"]] = relationship(
+        "Pegawai",
+        foreign_keys=[id_pegawai],
+        back_populates="realisasi_dibuat",
+    )
+
+    verifier: Mapped[Optional["Pegawai"]] = relationship(
+        "Pegawai",
+        foreign_keys=[id_verifier],
+        back_populates="realisasi_diverifikasi",
     )
 
 

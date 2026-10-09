@@ -350,18 +350,49 @@ CREATE TABLE IF NOT EXISTS dokumen_arsip (
 
 
 -- =========================================================
--- 12. ANGGARAN
+-- 12. TAHUN ANGGARAN
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS tahun_anggaran (
+    id_tahun_anggaran INT AUTO_INCREMENT PRIMARY KEY,
+    tahun INT NOT NULL UNIQUE,
+    status VARCHAR(20) NOT NULL DEFAULT 'draft',
+    tanggal_mulai DATE NOT NULL,
+    tanggal_selesai DATE NOT NULL,
+    deskripsi VARCHAR(255) NULL,
+    id_pegawai_pembuat INT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_tahun_pegawai
+        FOREIGN KEY (id_pegawai_pembuat)
+        REFERENCES pegawai(id_pegawai)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+
+-- =========================================================
+-- 13. MASTER AKUN ANGGARAN
 -- =========================================================
 
 CREATE TABLE IF NOT EXISTS akun_anggaran (
     id_akun_anggaran INT AUTO_INCREMENT PRIMARY KEY,
-
     id_bagian INT NOT NULL,
 
     kode_akun VARCHAR(50) NOT NULL UNIQUE,
     nama_akun VARCHAR(150) NOT NULL,
 
+    -- Legacy field: Dipertahankan untuk integritas data existing
     total_pagu DECIMAL(18,2) NOT NULL DEFAULT 0,
+
+    jenis_belanja VARCHAR(100) NULL,
+    program VARCHAR(255) NULL,
+    sub_program VARCHAR(255) NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'active',
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_akun_bagian
         FOREIGN KEY (id_bagian)
@@ -371,24 +402,135 @@ CREATE TABLE IF NOT EXISTS akun_anggaran (
 ) ENGINE=InnoDB;
 
 
+-- =========================================================
+-- 14. PAGU ANGGARAN (ALOKASI TAHUNAN)
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS pagu_anggaran (
+    id_pagu INT AUTO_INCREMENT PRIMARY KEY,
+    id_tahun_anggaran INT NOT NULL,
+    id_akun_anggaran INT NOT NULL,
+
+    pagu_awal DECIMAL(18,2) NOT NULL DEFAULT 0,
+    pagu_aktif DECIMAL(18,2) NOT NULL DEFAULT 0,
+
+    nomor_sk VARCHAR(100) NULL,
+    tanggal_sk DATE NULL,
+    keterangan TEXT NULL,
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_pagu_tahun
+        FOREIGN KEY (id_tahun_anggaran)
+        REFERENCES tahun_anggaran(id_tahun_anggaran)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_pagu_akun
+        FOREIGN KEY (id_akun_anggaran)
+        REFERENCES akun_anggaran(id_akun_anggaran)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT uq_pagu_tahun_akun
+        UNIQUE (id_tahun_anggaran, id_akun_anggaran)
+) ENGINE=InnoDB;
+
+
+-- =========================================================
+-- 15. REVISI ANGGARAN (AUDIT TRAIL)
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS revisi_anggaran (
+    id_revisi INT AUTO_INCREMENT PRIMARY KEY,
+    id_pagu INT NOT NULL,
+    id_pegawai INT NOT NULL,
+
+    nomor_revisi VARCHAR(100) NOT NULL,
+    tanggal_revisi DATE NOT NULL,
+    pagu_sebelum DECIMAL(18,2) NOT NULL,
+    pagu_sesudah DECIMAL(18,2) NOT NULL,
+    alasan_revisi TEXT NOT NULL,
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_revisi_pagu
+        FOREIGN KEY (id_pagu)
+        REFERENCES pagu_anggaran(id_pagu)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_revisi_pegawai
+        FOREIGN KEY (id_pegawai)
+        REFERENCES pegawai(id_pegawai)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+
+-- =========================================================
+-- 16. TRANSAKSI REALISASI ANGGARAN
+-- =========================================================
+
 CREATE TABLE IF NOT EXISTS realisasi_anggaran (
     id_realisasi INT AUTO_INCREMENT PRIMARY KEY,
 
+    -- Budget allocation relation (Nullable for legacy transactions)
+    id_pagu INT NULL,
+
+    -- Legacy master account relation preserved
     id_akun_anggaran INT NOT NULL,
+
+    id_pegawai INT NULL,
+    id_verifier INT NULL,
 
     tanggal_transaksi DATE NOT NULL,
     nomor_dokumen VARCHAR(100) NOT NULL,
     uraian_kegiatan TEXT NOT NULL,
 
     jumlah_realisasi DECIMAL(18,2) NOT NULL DEFAULT 0,
-
     status VARCHAR(50) NOT NULL DEFAULT 'draft',
+
+    periode VARCHAR(50) NULL,
+    bukti_file_path VARCHAR(255) NULL,
+    bukti_file_nama VARCHAR(255) NULL,
+    bukti_file_ukuran BIGINT NULL,
+    bukti_file_mime VARCHAR(100) NULL,
+
+    catatan_verifikasi TEXT NULL,
+    verified_at DATETIME NULL,
+
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_realisasi_pagu
+        FOREIGN KEY (id_pagu)
+        REFERENCES pagu_anggaran(id_pagu)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
 
     CONSTRAINT fk_realisasi_akun
         FOREIGN KEY (id_akun_anggaran)
         REFERENCES akun_anggaran(id_akun_anggaran)
         ON DELETE RESTRICT
-        ON UPDATE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_realisasi_pegawai
+        FOREIGN KEY (id_pegawai)
+        REFERENCES pegawai(id_pegawai)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_realisasi_verifier
+        FOREIGN KEY (id_verifier)
+        REFERENCES pegawai(id_pegawai)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+
+    INDEX ix_realisasi_status (status),
+    INDEX ix_realisasi_tanggal (tanggal_transaksi),
+    INDEX ix_realisasi_pagu (id_pagu)
 ) ENGINE=InnoDB;
 
 
