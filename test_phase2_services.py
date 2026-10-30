@@ -40,6 +40,24 @@ async def run_phase2_service_tests():
     print("==================================================")
 
     async with AsyncSessionLocal() as session:
+        # Pre-cleanup to guarantee idempotent test runs
+        from sqlalchemy import delete
+        await session.execute(delete(RevisiAnggaran))
+        await session.execute(delete(RealisasiAnggaran))
+        await session.execute(delete(PaguAnggaran))
+        # Find id_bagian for BAG-TEST if exists
+        bg_stmt = select(Bagian.id_bagian).where(Bagian.kode_bagian == "BAG-TEST")
+        bg_res = await session.execute(bg_stmt)
+        bg_ids = bg_res.scalars().all()
+        if bg_ids:
+            await session.execute(delete(AkunAnggaran).where(AkunAnggaran.id_bagian.in_(bg_ids)))
+            await session.execute(delete(Pegawai).where(Pegawai.id_bagian.in_(bg_ids)))
+        await session.execute(delete(AkunAnggaran).where(AkunAnggaran.kode_akun == "521211"))
+        await session.execute(delete(TahunAnggaran).where(TahunAnggaran.tahun.in_([2026, 2025, 2024])))
+        await session.execute(delete(Pegawai).where(Pegawai.nip.in_(["199001012015011001", "198202022008012002"])))
+        await session.execute(delete(Bagian).where(Bagian.kode_bagian == "BAG-TEST"))
+        await session.commit()
+
         # Setup Master Bagian & Pegawai
         bagian = Bagian(kode_bagian="BAG-TEST", nama_bagian="Divisi Perencanaan dan Logistik")
         session.add(bagian)
@@ -110,32 +128,40 @@ async def run_phase2_service_tests():
         print(f"[TEST 3 PASSED] Created AkunAnggaran: {akun.kode_akun} - {akun.nama_akun}")
 
         # ----------------------------------------------------------------------
-        # Test 4: Create Pagu Anggaran (Alokasi 2026)
+        # Test 4: Verify Auto-Created Pagu (Phase 5 Invariant) & Allocate Pagu
         # ----------------------------------------------------------------------
-        pagu_in = PaguAnggaranCreate(
-            id_tahun_anggaran=t2026.id_tahun_anggaran,
-            id_akun_anggaran=akun.id_akun_anggaran,
-            pagu_awal=Decimal("100000000.00"),
-            pagu_aktif=Decimal("100000000.00"),
-            nomor_sk="SK/01/2026",
-            tanggal_sk=date(2026, 1, 2),
-            keterangan="Pagu Awal DIPA 2026",
-        )
-        pagu = await pagu_anggaran.create_pagu(session, obj_in=pagu_in)
-        assert pagu.id_pagu is not None
-        assert pagu.pagu_awal == Decimal("100000000.00")
-        assert pagu.pagu_aktif == Decimal("100000000.00")
-        print(f"[TEST 4 PASSED] Created PaguAnggaran: id={pagu.id_pagu}, pagu_aktif={pagu.pagu_aktif}")
+        pagu_auto = await pagu_anggaran.get_by_tahun_akun(session, t2026.id_tahun_anggaran, akun.id_akun_anggaran)
+        assert pagu_auto is not None, "Pagu should be auto-created upon active account creation (Phase 5)"
+        assert pagu_auto.pagu_awal == Decimal("0.00")
+        assert pagu_auto.pagu_aktif == Decimal("0.00")
 
         # ----------------------------------------------------------------------
         # Test 5: Reject Duplicate Budget for Same Year and Account
         # ----------------------------------------------------------------------
+        pagu_dup_in = PaguAnggaranCreate(
+            id_tahun_anggaran=t2026.id_tahun_anggaran,
+            id_akun_anggaran=akun.id_akun_anggaran,
+            pagu_awal=Decimal("100000000.00"),
+        )
         try:
-            await pagu_anggaran.create_pagu(session, obj_in=pagu_in)
+            await pagu_anggaran.create_pagu(session, obj_in=pagu_dup_in)
             assert False, "Should have rejected duplicate budget for same year and account"
         except HTTPException as e:
             assert e.status_code == 400
             print(f"[TEST 5 PASSED] Duplicate budget allocation rejected: {e.detail}")
+
+        # Set initial allocation 100M for Test 6+
+        rev_init = RevisiAnggaranCreate(
+            id_pagu=pagu_auto.id_pagu,
+            nomor_revisi="INIT-01/2026",
+            tanggal_revisi=date(2026, 1, 2),
+            pagu_baru=Decimal("100000000.00"),
+            alasan_revisi="Penetapan DIPA Awal 2026",
+        )
+        await revisi_anggaran.create_revisi(session, obj_in=rev_init, id_pegawai=verifier.id_pegawai)
+        pagu = await pagu_anggaran.get(session, pagu_auto.id_pagu)
+        assert pagu.pagu_aktif == Decimal("100000000.00")
+        print(f"[TEST 4 PASSED] PaguAnggaran allocated: id={pagu.id_pagu}, pagu_aktif={pagu.pagu_aktif}")
 
         # ----------------------------------------------------------------------
         # Test 6 & 7: Atomic Revision and History Preserved
@@ -167,15 +193,15 @@ async def run_phase2_service_tests():
         pagu_refreshed = await pagu_anggaran.get_detail(session, pagu.id_pagu)
         assert pagu_refreshed.pagu_aktif == Decimal("150000000.00")
 
-        # Verify history intact
+        # Verify history intact (init + rev1 + rev2 = 3)
         history = await revisi_anggaran.get_history_by_pagu(session, pagu.id_pagu)
-        assert len(history) == 2
+        assert len(history) == 3
         print(f"[TEST 6 & 7 PASSED] Revisions created atomically. Active budget is {pagu_refreshed.pagu_aktif}. History count: {len(history)}")
 
         # ----------------------------------------------------------------------
-        # Test 8: Create Draft Realization
+        # Test 8: Direct Verified Realization (New Workflow)
         # ----------------------------------------------------------------------
-        draft_in = RealisasiAnggaranCreateDraft(
+        direct_in = RealisasiAnggaranCreateDraft(
             id_pagu=pagu.id_pagu,
             tanggal_transaksi=date(2026, 3, 1),
             nomor_dokumen="BJU/001/III/2026",
@@ -187,38 +213,45 @@ async def run_phase2_service_tests():
             bukti_file_ukuran=204800,
             bukti_file_mime="application/pdf",
         )
-        draft = await realisasi_anggaran.create_draft(session, obj_in=draft_in, id_pegawai=operator.id_pegawai)
-        assert draft.status == "draft"
-        assert draft.id_akun_anggaran == akun.id_akun_anggaran
-        print(f"[TEST 8 PASSED] Draft transaction created: id={draft.id_realisasi}, status={draft.status}")
+        verified_direct = await realisasi_anggaran.create_realisasi_direct(session, obj_in=direct_in, id_pegawai=operator.id_pegawai)
+        assert verified_direct.status == "verified"
+        assert verified_direct.id_akun_anggaran == akun.id_akun_anggaran
+        assert verified_direct.id_verifier is None
+        assert verified_direct.verified_at is not None
+        print(f"[TEST 8 PASSED] Direct verified transaction created: id={verified_direct.id_realisasi}, status={verified_direct.status}")
 
         # ----------------------------------------------------------------------
-        # Test 9: Draft does NOT count toward verified realization
+        # Test 9: Verified direct counts toward budget summary
         # ----------------------------------------------------------------------
         summary = await calculate_budget_summary(session, pagu.id_pagu)
-        assert summary.total_realisasi_verified == Decimal("0.00")
-        assert summary.sisa_anggaran == Decimal("150000000.00")
-        assert summary.persentase_serapan == 0.0
-        print(f"[TEST 9 PASSED] Draft does NOT affect budget summary. Remaining: {summary.sisa_anggaran}")
+        assert summary.total_realisasi_verified == Decimal("30000000.00")
+        assert summary.sisa_anggaran == Decimal("120000000.00")
+        assert summary.persentase_serapan == 20.0
+        print(f"[TEST 9 PASSED] Direct transaction instantly counts toward budget. Remaining: {summary.sisa_anggaran}")
 
         # ----------------------------------------------------------------------
-        # Test 10: Submit Realization Draft -> Submitted
+        # Test 10, 11, 12, 13: Backward Compatibility for Legacy Draft -> Submitted -> Verified
         # ----------------------------------------------------------------------
-        submitted = await realisasi_anggaran.submit_realisasi(session, id_realisasi=draft.id_realisasi, current_user_id=operator.id_pegawai)
+        legacy_draft = RealisasiAnggaran(
+            id_pagu=pagu.id_pagu,
+            id_akun_anggaran=akun.id_akun_anggaran,
+            id_pegawai=operator.id_pegawai,
+            tanggal_transaksi=date(2026, 3, 2),
+            nomor_dokumen="BJU/LEGACY/III/2026",
+            uraian_kegiatan="Belanja Legacy Workflow Draft",
+            jumlah_realisasi=Decimal("20000000.00"),
+            status="draft",
+        )
+        session.add(legacy_draft)
+        await session.commit()
+        await session.refresh(legacy_draft)
+
+        # Submitted
+        submitted = await realisasi_anggaran.submit_realisasi(session, id_realisasi=legacy_draft.id_realisasi, current_user_id=operator.id_pegawai)
         assert submitted.status == "submitted"
-        print(f"[TEST 10 PASSED] Transaction submitted: id={submitted.id_realisasi}, status={submitted.status}")
+        print(f"[TEST 10 & 11 PASSED] Legacy draft submitted successfully: id={submitted.id_realisasi}, status={submitted.status}")
 
-        # ----------------------------------------------------------------------
-        # Test 11: Submitted does NOT count toward verified realization
-        # ----------------------------------------------------------------------
-        summary_submitted = await calculate_budget_summary(session, pagu.id_pagu)
-        assert summary_submitted.total_realisasi_verified == Decimal("0.00")
-        assert summary_submitted.sisa_anggaran == Decimal("150000000.00")
-        print(f"[TEST 11 PASSED] Submitted does NOT affect verified realization summary")
-
-        # ----------------------------------------------------------------------
-        # Test 12: Verify Realization (Approval with Row Lock)
-        # ----------------------------------------------------------------------
+        # Verify
         verify_in = RealisasiAnggaranVerify(catatan_verifikasi="SPJ dan kuitansi pembayaran telah lengkap dan sah")
         verified = await realisasi_anggaran.verify_realisasi(
             session,
@@ -229,29 +262,32 @@ async def run_phase2_service_tests():
         assert verified.status == "verified"
         assert verified.id_verifier == verifier.id_pegawai
         assert verified.verified_at is not None
-        print(f"[TEST 12 PASSED] Transaction verified: id={verified.id_realisasi}, verifier={verified.id_verifier}")
+        print(f"[TEST 12 PASSED] Legacy transaction verified: id={verified.id_realisasi}, verifier={verified.id_verifier}")
 
-        # ----------------------------------------------------------------------
-        # Test 13: Verified realization counts toward budget summary
-        # ----------------------------------------------------------------------
+        # Summary updated with 30M + 20M = 50M
         summary_verified = await calculate_budget_summary(session, pagu.id_pagu)
-        assert summary_verified.total_realisasi_verified == Decimal("30000000.00")
-        assert summary_verified.sisa_anggaran == Decimal("120000000.00")
-        assert summary_verified.persentase_serapan == 20.0  # 30M / 150M * 100
-        print(f"[TEST 13 PASSED] Budget Summary: Pagu={summary_verified.pagu_aktif}, Verified={summary_verified.total_realisasi_verified}, Sisa={summary_verified.sisa_anggaran}, Serapan={summary_verified.persentase_serapan}%")
+        assert summary_verified.total_realisasi_verified == Decimal("50000000.00")
+        assert summary_verified.sisa_anggaran == Decimal("100000000.00")
+        print(f"[TEST 13 PASSED] Budget Summary: Verified={summary_verified.total_realisasi_verified}, Sisa={summary_verified.sisa_anggaran}")
 
         # ----------------------------------------------------------------------
         # Test 14: Reject Transaction Workflow
         # ----------------------------------------------------------------------
-        draft2_in = RealisasiAnggaranCreateDraft(
+        legacy_draft2 = RealisasiAnggaran(
             id_pagu=pagu.id_pagu,
-            tanggal_transaksi=date(2026, 3, 2),
+            id_akun_anggaran=akun.id_akun_anggaran,
+            id_pegawai=operator.id_pegawai,
+            tanggal_transaksi=date(2026, 3, 3),
             nomor_dokumen="BJU/002/III/2026",
             uraian_kegiatan="Belanja Spanduk Sosialisasi",
             jumlah_realisasi=Decimal("10000000.00"),
+            status="draft",
         )
-        draft2 = await realisasi_anggaran.create_draft(session, obj_in=draft2_in, id_pegawai=operator.id_pegawai)
-        sub2 = await realisasi_anggaran.submit_realisasi(session, id_realisasi=draft2.id_realisasi, current_user_id=operator.id_pegawai)
+        session.add(legacy_draft2)
+        await session.commit()
+        await session.refresh(legacy_draft2)
+
+        sub2 = await realisasi_anggaran.submit_realisasi(session, id_realisasi=legacy_draft2.id_realisasi, current_user_id=operator.id_pegawai)
         rej_in = RealisasiAnggaranReject(catatan_verifikasi="Kuitansi tanda tangan belum basah, harap lengkapi")
         rejected = await realisasi_anggaran.reject_realisasi(session, id_realisasi=sub2.id_realisasi, id_verifier=verifier.id_pegawai, obj_in=rej_in)
         assert rejected.status == "rejected"
@@ -260,28 +296,27 @@ async def run_phase2_service_tests():
 
         # Rejected does NOT affect budget summary
         summary_after_reject = await calculate_budget_summary(session, pagu.id_pagu)
-        assert summary_after_reject.total_realisasi_verified == Decimal("30000000.00")
-        assert summary_after_reject.sisa_anggaran == Decimal("120000000.00")
+        assert summary_after_reject.total_realisasi_verified == Decimal("50000000.00")
+        assert summary_after_reject.sisa_anggaran == Decimal("100000000.00")
         print(f"[TEST 14 PASSED] Rejected transaction confirmed: status={rejected.status}, budget unaffected")
 
         # ----------------------------------------------------------------------
-        # Test 15: Overbudget Rejection on Submit and Verify
+        # Test 15: Overbudget Rejection on Direct Creation
         # ----------------------------------------------------------------------
-        # Available budget is currently 120M. Attempt to submit 130M.
+        # Available budget is currently 100M. Attempt to create 110M.
         over_in = RealisasiAnggaranCreateDraft(
             id_pagu=pagu.id_pagu,
             tanggal_transaksi=date(2026, 3, 5),
             nomor_dokumen="BJU/OVER/III/2026",
             uraian_kegiatan="Kegiatan Bernilai Melebihi Sisa",
-            jumlah_realisasi=Decimal("130000000.00"),
+            jumlah_realisasi=Decimal("110000000.00"),
         )
-        draft_over = await realisasi_anggaran.create_draft(session, obj_in=over_in, id_pegawai=operator.id_pegawai)
         try:
-            await realisasi_anggaran.submit_realisasi(session, id_realisasi=draft_over.id_realisasi, current_user_id=operator.id_pegawai)
-            assert False, "Should have rejected overbudget submission"
+            await realisasi_anggaran.create_realisasi_direct(session, obj_in=over_in, id_pegawai=operator.id_pegawai)
+            assert False, "Should have rejected overbudget creation"
         except HTTPException as e:
             assert e.status_code == 400
-            print(f"[TEST 15 PASSED] Overbudget submit rejected: {e.detail}")
+            print(f"[TEST 15 PASSED] Overbudget creation rejected: {e.detail}")
 
         # ----------------------------------------------------------------------
         # Test 16: Invalid State Transitions Rejected
@@ -343,16 +378,16 @@ async def run_phase2_service_tests():
 
         # Ensure legacy transaction does NOT contaminate 2026 budget summary
         summary_2026 = await calculate_budget_summary(session, pagu.id_pagu)
-        assert summary_2026.total_realisasi_verified == Decimal("30000000.00")
+        assert summary_2026.total_realisasi_verified == Decimal("50000000.00")
         print(f"[TEST 18 PASSED] Legacy transaction with id_pagu=NULL safely readable and completely isolated from 2026 summary")
 
         # ----------------------------------------------------------------------
         # CLEANUP: Return Database to Baseline
         # ----------------------------------------------------------------------
         await session.delete(legacy_tx)
-        await session.delete(draft_over)
-        await session.delete(rejected)
-        await session.delete(verified)
+        await session.delete(legacy_draft2)
+        await session.delete(legacy_draft)
+        await session.delete(verified_direct)
         for h in history:
             await session.delete(h)
         await session.delete(pagu)

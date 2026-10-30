@@ -11,8 +11,12 @@ from app.schemas.anggaran import (
     PaguAnggaranResponse,
     PaguAnggaranListResponse,
     BudgetSummaryResponse,
+    PaguRevisiRequest,
+    RevisiAnggaranResponse,
+    RevisiAnggaranCreate,
 )
-from app.services.anggaran import pagu_anggaran, calculate_budget_summary
+from app.services.anggaran import pagu_anggaran, revisi_anggaran, calculate_budget_summary
+from datetime import date
 
 router = APIRouter()
 
@@ -78,6 +82,59 @@ async def read_pagu_summary(
     db: AsyncSession = Depends(get_db),
 ) -> Any:
     return await calculate_budget_summary(db, id_pagu)
+
+
+@router.get(
+    "/{id_pagu}/revisi",
+    response_model=list[RevisiAnggaranResponse],
+    summary="Histori Audit Trail Revisi Pagu",
+    description="Mengambil riwayat audit trail revisi untuk suatu pagu tertentu secara read-only (immutable).",
+)
+async def read_pagu_revisi_history(
+    id_pagu: int,
+    db: AsyncSession = Depends(get_db),
+) -> Any:
+    # Ensure pagu exists
+    db_pagu = await pagu_anggaran.get(db, id_pagu)
+    if not db_pagu:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Pagu anggaran dengan ID {id_pagu} tidak ditemukan",
+        )
+    items = await revisi_anggaran.get_history_by_pagu(db, id_pagu=id_pagu)
+    return [revisi_anggaran.enrich_revisi_response(it) for it in items]
+
+
+@router.post(
+    "/{id_pagu}/revisi",
+    response_model=RevisiAnggaranResponse,
+    status_code=status.HTTP_201_CREATED,
+    summary="Eksekusi Revisi Pagu Anggaran",
+    description="Melakukan revisi pagu anggaran dan mencatat audit trail secara atomik.",
+)
+async def create_pagu_revisi(
+    id_pagu: int,
+    rev_in: PaguRevisiRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: Pegawai = Depends(require_admin),
+) -> Any:
+    alasan_final = rev_in.alasan_revisi or rev_in.alasan or "Penyesuaian anggaran DIPA"
+    nomor_final = rev_in.nomor_revisi or f"REV-PAGU/{id_pagu}/{date.today().strftime('%Y%m%d%H%M')}"
+    tanggal_final = rev_in.tanggal_revisi or date.today()
+
+    full_create = RevisiAnggaranCreate(
+        id_pagu=id_pagu,
+        nomor_revisi=nomor_final,
+        tanggal_revisi=tanggal_final,
+        pagu_baru=rev_in.pagu_baru,
+        alasan_revisi=alasan_final,
+    )
+    db_obj = await revisi_anggaran.create_revisi(
+        db,
+        obj_in=full_create,
+        id_pegawai=current_user.id_pegawai,
+    )
+    return revisi_anggaran.enrich_revisi_response(db_obj)
 
 
 @router.post(

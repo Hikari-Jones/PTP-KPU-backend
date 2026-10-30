@@ -135,7 +135,10 @@ async def run_phase3_api_tests():
         print(f"[TEST 4 PASSED] POST & GET /akun-anggaran/ -> 201 & 200 OK (ID: {id_akun})")
 
         # ----------------------------------------------------------------------
-        # Test 5: POST Pagu Anggaran
+        # Test 5 & 6: Pagu Anggaran Auto-Created via Phase 5 (100% Invariant)
+        # Sesuai Phase 5, ketika akun aktif 521219 dibuat, Pagu TA 2026 otomatis terbentuk.
+        # POST pagu baru dengan kombinasi yang sama harus ditolak (Duplicate -> 400).
+        # Pagu otomatis kemudian dialokasikan 100.000.000 melalui revisi anggaran.
         # ----------------------------------------------------------------------
         payload_pagu = {
             "id_tahun_anggaran": id_tahun_2026,
@@ -146,20 +149,33 @@ async def run_phase3_api_tests():
             "tanggal_sk": "2026-01-02",
             "keterangan": "Pagu awal DIPA 2026",
         }
-        res = await client.post("/api/v1/pagu-anggaran/", json=payload_pagu, headers=admin_headers)
-        assert res.status_code == 201, f"Expected 201, got {res.status_code}: {res.text}"
-        data_pagu = res.json()
-        id_pagu = data_pagu["id_pagu"]
-        assert Decimal(data_pagu["pagu_awal"]) == Decimal("100000000.00")
-        assert Decimal(data_pagu["sisa_anggaran"]) == Decimal("100000000.00")
-        print(f"[TEST 5 PASSED] POST /pagu-anggaran/ -> 201 Created (ID: {id_pagu})")
+        # Duplicate Pagu Anggaran -> 400 Bad Request karena sudah otomatis terbentuk saat create_akun
+        res_dup = await client.post("/api/v1/pagu-anggaran/", json=payload_pagu, headers=admin_headers)
+        assert res_dup.status_code == 400
+        print(f"[TEST 5 & 6 PASSED] Auto-create Pagu verified: Duplicate POST /pagu-anggaran/ rejected with 400: {res_dup.json()['detail']}")
 
-        # ----------------------------------------------------------------------
-        # Test 6: Duplicate Pagu Anggaran -> 400 Bad Request
-        # ----------------------------------------------------------------------
-        res = await client.post("/api/v1/pagu-anggaran/", json=payload_pagu, headers=admin_headers)
-        assert res.status_code == 400
-        print(f"[TEST 6 PASSED] Duplicate Pagu rejected with 400: {res.json()['detail']}")
+        # Ambil Pagu otomatis yang terbentuk
+        res_get_pagu = await client.get(f"/api/v1/pagu-anggaran/?id_tahun_anggaran={id_tahun_2026}&id_akun_anggaran={id_akun}")
+        assert res_get_pagu.status_code == 200
+        data_pagu = res_get_pagu.json()["items"][0]
+        id_pagu = data_pagu["id_pagu"]
+        assert Decimal(data_pagu["pagu_awal"]) == Decimal("0.00")
+
+        # Alokasikan pagu 100M melalui revisi
+        res_rev_init = await client.post(
+            "/api/v1/revisi-anggaran/",
+            json={
+                "id_pagu": id_pagu,
+                "nomor_revisi": "REV-INIT-2026",
+                "tanggal_revisi": "2026-01-02",
+                "pagu_baru": "100000000.00",
+                "alasan_revisi": "Penetapan Alokasi DIPA Awal 2026",
+            },
+            headers=admin_headers,
+        )
+        assert res_rev_init.status_code == 201
+        assert Decimal(res_rev_init.json()["pagu_sesudah"]) == Decimal("100000000.00")
+        print(f"[TEST 5 & 6 PASSED] Pagu otomatis ID: {id_pagu} berhasil dialokasikan 100.000.000 via revisi")
 
         # ----------------------------------------------------------------------
         # Test 7: GET Pagu Summary
@@ -174,82 +190,69 @@ async def run_phase3_api_tests():
         print(f"[TEST 7 PASSED] GET /pagu-anggaran/{id_pagu}/summary -> 200 OK (Sisa: {summary_data['sisa_anggaran']})")
 
         # ----------------------------------------------------------------------
-        # Test 8: POST Realisasi Draft
+        # Test 8: POST Realisasi Direct -> 201 Created (Status: verified)
+        # Requirement: Transaksi baru langsung berstatus 'verified' setelah backend validation
         # ----------------------------------------------------------------------
         payload_realisasi = {
             "id_pagu": id_pagu,
             "tanggal_transaksi": "2026-02-15",
             "nomor_dokumen": "SPM-2026-001",
             "uraian_kegiatan": "Pengadaan Konsumsi Rapat Koordinasi",
-            "jumlah_realisasi": "15000000.00",
+            "jumlah_realisasi": "20000000.00",
             "periode": "Triwulan I",
         }
         res = await client.post("/api/v1/realisasi-anggaran/", json=payload_realisasi, headers=op_headers)
         assert res.status_code == 201, f"Expected 201, got {res.status_code}: {res.text}"
         data_realisasi = res.json()
         id_realisasi = data_realisasi["id_realisasi"]
-        assert data_realisasi["status"] == "draft"
+        assert data_realisasi["status"] == "verified"
         assert data_realisasi["id_pegawai"] == id_op
-        print(f"[TEST 8 PASSED] POST /realisasi-anggaran/ -> 201 Created (ID: {id_realisasi}, Status: draft)")
+        assert data_realisasi["id_verifier"] is None
+        print(f"[TEST 8 PASSED] POST /realisasi-anggaran/ -> 201 Created (ID: {id_realisasi}, Status: verified directly)")
 
-        # ----------------------------------------------------------------------
-        # Test 9: PUT Realisasi Draft
-        # ----------------------------------------------------------------------
-        update_payload = {
-            "jumlah_realisasi": "20000000.00",
-            "uraian_kegiatan": "Pengadaan Konsumsi Rapat Koordinasi (Revisi Nominal)",
-        }
-        res = await client.put(f"/api/v1/realisasi-anggaran/{id_realisasi}", json=update_payload, headers=op_headers)
-        assert res.status_code == 200
-        assert Decimal(res.json()["jumlah_realisasi"]) == Decimal("20000000.00")
-        print(f"[TEST 9 PASSED] PUT /realisasi-anggaran/{id_realisasi} -> 200 OK (Updated to 20,000,000.00)")
-
-        # ----------------------------------------------------------------------
-        # Test 10: POST Submit (Draft -> Submitted)
-        # ----------------------------------------------------------------------
-        res = await client.post(f"/api/v1/realisasi-anggaran/{id_realisasi}/submit", headers=op_headers)
-        assert res.status_code == 200
-        assert res.json()["status"] == "submitted"
-        print(f"[TEST 10 PASSED] POST /realisasi-anggaran/{id_realisasi}/submit -> 200 OK (Status: submitted)")
-
-        # ----------------------------------------------------------------------
-        # Test 11: Verify Realisasi (Submitted -> Verified)
-        # ----------------------------------------------------------------------
-        verify_payload = {
-            "catatan_verifikasi": "Dokumen lengkap dan sah sesuai SPJ",
-        }
-        res = await client.post(f"/api/v1/realisasi-anggaran/{id_realisasi}/verify", json=verify_payload, headers=admin_headers)
-        assert res.status_code == 200
-        data_ver = res.json()
-        assert data_ver["status"] == "verified"
-        assert data_ver["id_verifier"] == id_ver
-        assert data_ver["verified_at"] is not None
-
-        # Verify budget deduction in summary
+        # Verify budget deduction in summary immediately
         res_sum = await client.get(f"/api/v1/pagu-anggaran/{id_pagu}/summary")
         assert Decimal(res_sum.json()["total_realisasi_verified"]) == Decimal("20000000.00")
         assert Decimal(res_sum.json()["sisa_anggaran"]) == Decimal("80000000.00")
         assert res_sum.json()["persentase_serapan"] == 20.0
-        print(f"[TEST 11 PASSED] POST /verify -> 200 OK (Verified by user {id_ver}, Pagu sisa: 80,000,000.00)")
+        print(f"[TEST 9 & 11 PASSED] Direct verified realization counts towards budget: Sisa 80M, Serapan 20%")
 
         # ----------------------------------------------------------------------
-        # Test 12: Reject Realisasi Flow
+        # Test 10 & 12: Backward compatibility legacy workflow (draft -> submit -> reject)
+        # We manually seed a draft row to test legacy endpoints submit and reject
         # ----------------------------------------------------------------------
-        # Create second draft to test rejection
-        p2 = {
-            "id_pagu": id_pagu,
-            "tanggal_transaksi": "2026-03-01",
-            "nomor_dokumen": "SPM-2026-002",
-            "uraian_kegiatan": "Belanja Perlengkapan Kantor",
-            "jumlah_realisasi": "10000000.00",
+        async with AsyncSessionLocal() as session:
+            legacy_d = RealisasiAnggaran(
+                id_pagu=id_pagu,
+                id_akun_anggaran=id_akun,
+                id_pegawai=id_op,
+                tanggal_transaksi=date(2026, 3, 1),
+                nomor_dokumen="SPM-2026-LEGACY",
+                uraian_kegiatan="Belanja Perlengkapan Kantor Legacy",
+                jumlah_realisasi=Decimal("10000000.00"),
+                status="draft",
+            )
+            session.add(legacy_d)
+            await session.commit()
+            id_legacy = legacy_d.id_realisasi
+
+        # PUT Realisasi Draft (Legacy)
+        update_payload = {
+            "uraian_kegiatan": "Belanja Perlengkapan Kantor Legacy (Updated)",
         }
-        res = await client.post("/api/v1/realisasi-anggaran/", json=p2, headers=op_headers)
-        id_r2 = res.json()["id_realisasi"]
-        # Submit
-        await client.post(f"/api/v1/realisasi-anggaran/{id_r2}/submit", headers=op_headers)
+        res = await client.put(f"/api/v1/realisasi-anggaran/{id_legacy}", json=update_payload, headers=op_headers)
+        assert res.status_code == 200
+        print(f"[TEST 10a PASSED] PUT /realisasi-anggaran/{id_legacy} -> 200 OK for legacy draft")
+
+        # Submit (draft -> submitted)
+        res_sub = await client.post(f"/api/v1/realisasi-anggaran/{id_legacy}/submit", headers=op_headers)
+        assert res_sub.status_code == 200
+        assert res_sub.json()["status"] == "submitted"
+        print(f"[TEST 10b PASSED] Legacy POST submit -> 200 OK (Status: submitted)")
+
         # Reject with mandatory reason
         reject_payload = {"catatan_verifikasi": "Kuitansi belum bertandatangan PPK"}
-        res_reject = await client.post(f"/api/v1/realisasi-anggaran/{id_r2}/reject", json=reject_payload, headers=admin_headers)
+        res_reject = await client.post(f"/api/v1/realisasi-anggaran/{id_legacy}/reject", json=reject_payload, headers=admin_headers)
         assert res_reject.status_code == 200
         assert res_reject.json()["status"] == "rejected"
         assert res_reject.json()["catatan_verifikasi"] == "Kuitansi belum bertandatangan PPK"
@@ -257,22 +260,14 @@ async def run_phase3_api_tests():
 
         # ----------------------------------------------------------------------
         # Test 13: Invalid State Transition (Draft cannot be directly verified)
+        # We test on legacy draft which is in 'draft' status (must be submitted first)
         # ----------------------------------------------------------------------
-        p3 = {
-            "id_pagu": id_pagu,
-            "tanggal_transaksi": "2026-03-05",
-            "nomor_dokumen": "SPM-2026-003",
-            "uraian_kegiatan": "Belanja Langsung Tanpa Submit",
-            "jumlah_realisasi": "5000000.00",
-        }
-        res = await client.post("/api/v1/realisasi-anggaran/", json=p3, headers=op_headers)
-        id_r3 = res.json()["id_realisasi"]
-        res_invalid_ver = await client.post(f"/api/v1/realisasi-anggaran/{id_r3}/verify", json={"catatan_verifikasi": "ok"}, headers=admin_headers)
+        res_invalid_ver = await client.post(f"/api/v1/realisasi-anggaran/{id_legacy}/verify", json={"catatan_verifikasi": "ok"}, headers=admin_headers)
         assert res_invalid_ver.status_code == 400
         print(f"[TEST 13 PASSED] Invalid state transition rejected with 400: {res_invalid_ver.json()['detail']}")
 
         # ----------------------------------------------------------------------
-        # Test 14: Overbudget Protection
+        # Test 14: Overbudget Protection (Direct Creation Rejection)
         # ----------------------------------------------------------------------
         p_over = {
             "id_pagu": id_pagu,
@@ -282,11 +277,9 @@ async def run_phase3_api_tests():
             "jumlah_realisasi": "90000000.00",  # Available is only 80,000,000.00
         }
         res_over = await client.post("/api/v1/realisasi-anggaran/", json=p_over, headers=op_headers)
-        id_r_over = res_over.json()["id_realisasi"]
-        # Submission should fail because 90M > 80M
-        res_sub_over = await client.post(f"/api/v1/realisasi-anggaran/{id_r_over}/submit", headers=op_headers)
-        assert res_sub_over.status_code == 400
-        print(f"[TEST 14 PASSED] Overbudget submission rejected with 400: {res_sub_over.json()['detail']}")
+        assert res_over.status_code == 400
+        assert "melebihi sisa anggaran" in res_over.json()["detail"]
+        print(f"[TEST 14 PASSED] Overbudget creation directly rejected with 400: {res_over.json()['detail']}")
 
         # ----------------------------------------------------------------------
         # Test 15: Closed Fiscal Year Protection
